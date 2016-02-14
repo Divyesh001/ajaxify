@@ -51,7 +51,7 @@
         xdr: false,
         settings: {
             accepts: {
-                "*": "*/"+"*", // applying */* directly will be counted as comment
+                "*": "*/*",
                 text: "text/plain",
                 html: "text/html",
                 xml: "application/xml, text/xml",
@@ -70,6 +70,15 @@
             processData: true,
             headers: {},
             crossOrigin: false,
+            responseType: "",
+            allowedResponseTypes: {
+                "": "''",
+                "arraybuffer": "arraybuffer",
+                "blob": "blob",
+                "document": "document",
+                "json": "json",
+                "text": "text"
+            }
         },
 
         /**
@@ -234,6 +243,10 @@
                 this.request.open(this.s.method, this.s.url, this.s.async, this.s.username, this.s.password);
             }
 
+            if (this.request.responseType) {
+                this.request.responseType = (this.s.allowedResponseTypes[this.s.responseType] ? this.s.allowedResponseTypes[this.s.responseType] : '');
+            }
+
             /**
              * Set all headers
              */
@@ -249,6 +262,9 @@
                 }, ajaxify.s.timeout);
             }
 
+            /**
+             * Listen for specific event triggers
+             */
             this.request.onload = function () {
                 if (this.readyState === 4) {
                     if (this.status >= 200 && this.status < 300) {
