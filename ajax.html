@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ajax framework</title>
+<script type="text/javascript" src="ajax.js"></script>
+</head>
+<body>
+
+
+<script type="text/javascript">
+var formData = new FormData();
+formData.append('da', 'da=da&asd=dsa');
+formData.append('id', 123456);
+
+ajaxify.ajax({
+    url: 'test.php',
+    method: "POST",
+    data: JSON.stringify({ City: 'Moscow', Age: 25 }),
+    dataType: "json",
+    headers: {
+        "my-Awes0mE-H3ad3R": "header4e"
+    }
+}, function (result) {
+    console.log(result)
+
+    // ajaxify.each(ajaxify.parseJSON(result), function(i, data) {
+    //     console.log(i);
+    //     console.log(data);
+    // });
+});
+
+
+</script>
+</body>
+</html>

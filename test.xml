@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed>
+  <title>EstateAssistant.eu</title>
+  <updated>2016-02-13 17:55:33</updated>
+  <ID>92ecbeef-67e6-4799-95ab-f0a4ab62be9b</ID>
+  <Brokers>
+    <Broker>
+      <BrokerName>Иван Владов</BrokerName>
+      <BrokerID>7d697c86-0f43-4ac6-8d5b-305854eced83</BrokerID>
+      <BrokerPhone>0879256070</BrokerPhone>
+      <BrokerEmail>vladov@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Йорданка Аянова</BrokerName>
+      <BrokerID>13630ab6-a243-46dc-b3d1-323cc8d78d2e</BrokerID>
+      <BrokerPhone>0888 955 905</BrokerPhone>
+      <BrokerEmail>home2u.aianova@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Калоян Гроздев</BrokerName>
+      <BrokerID>4b401bed-eb21-4aa1-87a9-41964f327d9f</BrokerID>
+      <BrokerPhone>0879256050</BrokerPhone>
+      <BrokerEmail>grozdev@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Лия Теохарова</BrokerName>
+      <BrokerID>36f05862-88a7-4a5c-b83a-4963de086d44</BrokerID>
+      <BrokerPhone>0885 22 12 23</BrokerPhone>
+      <BrokerEmail>home2u.teoharova@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Красимир Борисов</BrokerName>
+      <BrokerID>9a3080ea-6c4b-4494-9d79-6b42009b3a9e</BrokerID>
+      <BrokerPhone>0878 / 443 777</BrokerPhone>
+      <BrokerEmail>office@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Рая Велчева</BrokerName>
+      <BrokerID>13fece5b-2a6a-4951-9d68-823827f1a512</BrokerID>
+      <BrokerPhone>0876 003 004</BrokerPhone>
+      <BrokerEmail>velcheva@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Пламена Стоянова</BrokerName>
+      <BrokerID>9b3e08ac-83b3-4936-8d55-89b58abd40ca</BrokerID>
+      <BrokerPhone>0878897077</BrokerPhone>
+      <BrokerEmail>stoyanova@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>EA Support</BrokerName>
+      <BrokerID>ad36d444-524f-40c7-aa75-8e81effdcd8b</BrokerID>
+      <BrokerPhone>21312312</BrokerPhone>
+      <BrokerEmail>mail@mail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Мартин Сребров</BrokerName>
+      <BrokerID>06d4a9db-3e17-48d5-8e9f-94d11ce17c63</BrokerID>
+      <BrokerPhone>0878 / 16 43 43</BrokerPhone>
+      <BrokerEmail>info@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Диана Янева</BrokerName>
+      <BrokerID>e8d64d03-a32e-4c06-8467-95eebaa337af</BrokerID>
+      <BrokerPhone>0878915066</BrokerPhone>
+      <BrokerEmail>home2u.d.yaneva@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Светлaн Стоянов</BrokerName>
+      <BrokerID>69cca062-e5e2-43f9-a6bb-a00eadf4a70b</BrokerID>
+      <BrokerPhone>0877683504</BrokerPhone>
+      <BrokerEmail>stoyanov@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Юлия Петрова</BrokerName>
+      <BrokerID>b7236298-4e05-4b14-8af5-a39f01324183</BrokerID>
+      <BrokerPhone>0882901653</BrokerPhone>
+      <BrokerEmail>home2u.y.petrova@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Силвия Лунгарова</BrokerName>
+      <BrokerID>d5184128-ff59-46d0-97f5-a39f01330326</BrokerID>
+      <BrokerPhone>0882901650</BrokerPhone>
+      <BrokerEmail>home2u.s.lungarova@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Борислав Николов</BrokerName>
+      <BrokerID>16786535-77da-49b7-b8fa-a3a000ce8a00</BrokerID>
+      <BrokerPhone>0882901654</BrokerPhone>
+      <BrokerEmail>home2u.bnikolov@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Върбан Върбанов</BrokerName>
+      <BrokerID>d2594d52-1cbe-4ab6-80dc-a3e0008ac808</BrokerID>
+      <BrokerPhone>0882 901651</BrokerPhone>
+      <BrokerEmail>varbanov@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Теодора Русева</BrokerName>
+      <BrokerID>bb6694b0-79f9-4c97-9caf-a3e100efb693</BrokerID>
+      <BrokerPhone>0882901666</BrokerPhone>
+      <BrokerEmail>home2u.t.ruseva@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Мартин Борисов</BrokerName>
+      <BrokerID>5e4c268d-5bd0-4c36-a8b9-a3f800941d57</BrokerID>
+      <BrokerPhone>0887772788</BrokerPhone>
+      <BrokerEmail>mladost@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Симеон Иванов</BrokerName>
+      <BrokerID>f1d0c7f2-2da4-4e6a-a524-a42a00c4d5f2</BrokerID>
+      <BrokerPhone>0887076314</BrokerPhone>
+      <BrokerEmail>home2u.sivanov@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Иван Иванов</BrokerName>
+      <BrokerID>91509146-3cd3-4fea-9d83-a42a00c797c7</BrokerID>
+      <BrokerPhone>0887076497</BrokerPhone>
+      <BrokerEmail>home2u.iivanov@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Стоян Шишков</BrokerName>
+      <BrokerID>9f05a8af-8c6e-4262-9300-a44400f93bb2</BrokerID>
+      <BrokerPhone>0882 240 269</BrokerPhone>
+      <BrokerEmail>mail@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Калина Мутафова </BrokerName>
+      <BrokerID>c221c984-8ee9-4850-81f5-a451008e9e3f</BrokerID>
+      <BrokerPhone>0887075936</BrokerPhone>
+      <BrokerEmail>home2u.kmutafova@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Даниел Вълчинков</BrokerName>
+      <BrokerID>746cff8d-338c-4c83-a769-a48800cd4326</BrokerID>
+      <BrokerPhone>0882901658</BrokerPhone>
+      <BrokerEmail>home2u.d.vylchinkov@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Дияна Митова</BrokerName>
+      <BrokerID>74fb36da-94f4-4ec5-90ac-a48800ce6e2b</BrokerID>
+      <BrokerPhone>0882387108</BrokerPhone>
+      <BrokerEmail>mail@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Мая Петрова</BrokerName>
+      <BrokerID>4ba89220-105f-4357-ab94-a4aa00e4e92b</BrokerID>
+      <BrokerPhone>0882901655</BrokerPhone>
+      <BrokerEmail>home2u.m.petrova@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Милен Лесорашки</BrokerName>
+      <BrokerID>f33fb1b7-e73a-4caf-882a-a4ac007a944d</BrokerID>
+      <BrokerPhone>0888461403</BrokerPhone>
+      <BrokerEmail>home2u@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Диляна Панайотова</BrokerName>
+      <BrokerID>7120e332-ae1b-4506-a2d0-a4ac008007f5</BrokerID>
+      <BrokerPhone>0888461981</BrokerPhone>
+      <BrokerEmail>home2u.d.panayotova@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Ширин Шабанова</BrokerName>
+      <BrokerID>4862cd44-78f1-4854-98bb-a4b3006a9e8b</BrokerID>
+      <BrokerPhone>0882901663</BrokerPhone>
+      <BrokerEmail>home2u.shabanova@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Спас Секолов</BrokerName>
+      <BrokerID>21dcadca-b090-4239-9184-a4b500d61ca8</BrokerID>
+      <BrokerPhone>0882240269</BrokerPhone>
+      <BrokerEmail>home2u.s.sekalov@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Раяна Костадинова</BrokerName>
+      <BrokerID>8c337793-c3d6-4b44-980e-a4cd011c8a76</BrokerID>
+      <BrokerPhone>0886021414</BrokerPhone>
+      <BrokerEmail>home2u.r.kostadinova@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Даниел Атанасов</BrokerName>
+      <BrokerID>262013d4-0172-46e7-8cf0-a4e200da4cbb</BrokerID>
+      <BrokerPhone>0882790133</BrokerPhone>
+      <BrokerEmail>home2u.d.atanasov@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Зорница Гърнева</BrokerName>
+      <BrokerID>def086d1-1d55-44df-aead-a4e200dfa85f</BrokerID>
+      <BrokerPhone>0882790136</BrokerPhone>
+      <BrokerEmail>home2u.zgarneva@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Вили Янева</BrokerName>
+      <BrokerID>c8acd106-c797-4deb-b444-a50500cb4b10</BrokerID>
+      <BrokerPhone>0882901652</BrokerPhone>
+      <BrokerEmail>home2u.v.yaneva@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Емил Таров</BrokerName>
+      <BrokerID>5a23f31b-7f73-49cb-bab5-a50900bc33c3</BrokerID>
+      <BrokerPhone>0887076497</BrokerPhone>
+      <BrokerEmail>home2u.e.tarov@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Димитър Нонов</BrokerName>
+      <BrokerID>4f2b28b9-d678-4adf-b274-a52400d0bd98</BrokerID>
+      <BrokerPhone>0882387108</BrokerPhone>
+      <BrokerEmail>
+      </BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Мила Иванова</BrokerName>
+      <BrokerID>bd9c1a75-7c05-44b1-beee-a54400a755ab</BrokerID>
+      <BrokerPhone>0888461981</BrokerPhone>
+      <BrokerEmail>home2u.m.ivanova@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Даниела Маринова</BrokerName>
+      <BrokerID>e9378dec-c794-4420-b257-a560008e920c</BrokerID>
+      <BrokerPhone>0882984161</BrokerPhone>
+      <BrokerEmail>mladost@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Янчо Янчев</BrokerName>
+      <BrokerID>b83ffc22-4342-4505-abbf-a59800c28d35</BrokerID>
+      <BrokerPhone>0882790123</BrokerPhone>
+      <BrokerEmail>home2u.y.yanchev@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Боряна Костова</BrokerName>
+      <BrokerID>73b749d8-5b7d-46f9-afb2-a59800c5a3ee</BrokerID>
+      <BrokerPhone>0882790129</BrokerPhone>
+      <BrokerEmail>home2u.b.kostova@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Милен Лесорашки </BrokerName>
+      <BrokerID>11d51b07-4c23-4c57-b76c-a5a80075a16a</BrokerID>
+      <BrokerPhone>0888461403 </BrokerPhone>
+      <BrokerEmail>mladost@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Ралица Ценова</BrokerName>
+      <BrokerID>7bc758e5-c287-4621-9a43-a5e853548fca</BrokerID>
+      <BrokerPhone>0876039040</BrokerPhone>
+      <BrokerEmail>tsenova@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Весела Иванова</BrokerName>
+      <BrokerID>50cd2ca7-a619-46c8-acf8-ba4bf779bee0</BrokerID>
+      <BrokerPhone>0885221225</BrokerPhone>
+      <BrokerEmail>home2u.vivanova@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Станислава Петрова</BrokerName>
+      <BrokerID>7e07533a-810b-4d50-8b74-cb2a8445c5dc</BrokerID>
+      <BrokerPhone>0882790139</BrokerPhone>
+      <BrokerEmail>petrova@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Борис Богданов</BrokerName>
+      <BrokerID>3427b374-0ec8-47ef-8d29-e55d684fde15</BrokerID>
+      <BrokerPhone>0878 544 134</BrokerPhone>
+      <BrokerEmail>home2u.bbogdanov@gmail.com</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Офис Варна</BrokerName>
+      <BrokerID>343c75ab-2fa2-4d87-8f92-51084f09edde</BrokerID>
+      <BrokerPhone>0888 955 905</BrokerPhone>
+      <BrokerEmail>callcenter@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Офис Люлин</BrokerName>
+      <BrokerID>5223d14b-776f-4ed6-b6ff-a39f01340614</BrokerID>
+      <BrokerPhone>0888 955 905</BrokerPhone>
+      <BrokerEmail>callcenter@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Офис София</BrokerName>
+      <BrokerID>93202e72-9fc2-4a6c-9db4-a60c8bc07f2a</BrokerID>
+      <BrokerPhone>0888 955 905</BrokerPhone>
+      <BrokerEmail>callcenter@home2u.bg</BrokerEmail>
+    </Broker>
+    <Broker>
+      <BrokerName>Офис Бургас</BrokerName>
+      <BrokerID>b5829be1-33e5-44bb-a085-e8bd300d3f2a</BrokerID>
+      <BrokerPhone>0888 955 905</BrokerPhone>
+      <BrokerEmail>callcenter@home2u.bg</BrokerEmail>
+    </Broker>
+  </Brokers>
+  <Offers />
+  <Deleted>
+    <delete>
+      <UniqueEstateID>caba0fbd-beff-4e14-9970-a5ab00c97016</UniqueEstateID>
+      <delete>1</delete>
+    </delete>
+  </Deleted>
+</feed>
