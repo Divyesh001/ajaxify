@@ -5,9 +5,9 @@
 // echo json_encode($_REQUEST);
 //  die;
 if (isset($_REQUEST)) {
-echo json_encode($_REQUEST);
+// echo json_encode($_REQUEST);
+echo file_get_contents('test.xml');
     die();
-// echo file_get_contents('test.xml');
 }
 
 

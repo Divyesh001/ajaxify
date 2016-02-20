@@ -76,3 +76,32 @@ Ajax library with similar syntax like jQuery
         console.log(headers);
         console.log(XHR);
     });
+
+
+### XML
+
+####### From PHP file. The script will return plain text
+    ajaxify.ajax({
+        url: 'test.php',
+        method: "GET",
+        headers: {
+            "my-Awes0mE-H3ad3R": "header4e"
+        }
+    }).done(function (response, headers, XHR) {
+        console.log(response);
+        console.log(headers);
+        console.log(XHR);
+    });
+
+####### Directly from XML file. The script will return an XML object
+    ajaxify.ajax({
+        url: 'test.xml',
+        method: "GET",
+        headers: {
+            "my-Awes0mE-H3ad3R": "header4e"
+        }
+    }).done(function (response, headers, XHR) {
+        console.log(response);
+        console.log(headers);
+        console.log(XHR);
+    });

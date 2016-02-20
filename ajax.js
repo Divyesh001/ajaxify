@@ -289,7 +289,7 @@
 
                     var response;
                     response = request.responseText;
-                    if (config.s.dataType === 'xml') {
+                    if (request.responseXML !== null) {
                         response = request.responseXML;
                     }
 
