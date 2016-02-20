@@ -105,3 +105,16 @@ Ajax library with similar syntax like jQuery
         console.log(headers);
         console.log(XHR);
     });
+
+### Blob
+    ajaxify.ajax({
+        url: 'logo.png',
+        responseType: 'blob',
+        method: "GET",
+        headers: {
+            "my-Awes0mE-H3ad3R": "header4e"
+        }
+    }).done(function (response, headers, XHR) {
+        console.log(response)
+       ajaxify.parseBlob(response, 'image/png', '', true);
+    });

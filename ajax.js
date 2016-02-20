@@ -123,7 +123,44 @@ var ajaxify = (function (window, document, undefined) {
     };
 
     /**
-     * @param  {Object}
+     * @param  {Array} The data from the XHR response passed as array
+     * @param  {String} Resource mime type
+     * @param  {String} HTML attr where we want to append the data
+     * @param  {Boolean} Determinates if it should return the blob url or append to element
+     *
+     * @return {String|Void}
+     */
+    var parseBlob = function (data, mimeType, htmlAttrId, ret) {
+        var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
+        if(BlobBuilder) {
+            // android
+            var builder = new BlobBuilder();
+            builder.append([data]);
+            var blob = builder.getBlob(mimeType);
+        } else {
+            var blob = new Blob([data], {type: mimeType});
+        }
+
+        var url = (window.URL || window.webkitURL || window.mozURL || window.msURL).createObjectURL(blob);
+
+        if (ret === true) {
+            if (!htmlAttrId || typeof htmlAttrId !== 'string') {
+                var content = document.getElementsByTagName("body")[0],
+                img2 = document.createElement('img');
+                img2.setAttribute("id", 'my_auto_gen_id_tag');
+                content.appendChild(img2);
+                htmlAttrId = '#my_auto_gen_id_tag';
+            }
+
+            var img = document.querySelector(htmlAttrId);
+            img.src = url;
+        }
+
+        return url;
+    };
+
+    /**
+     * @param  {Object} Custom settings
      *
      * @return {Object}
      */
@@ -136,7 +173,7 @@ var ajaxify = (function (window, document, undefined) {
     };
 
     /**
-     * @param  {Object}
+     * @param  {Object} XMLHttpRequest
      *
      * @return {Object}
      */
@@ -159,7 +196,7 @@ var ajaxify = (function (window, document, undefined) {
     };
 
     /**
-     * @param  {Object}
+     * @param  {Object} XMLHttpRequest
      * @param  {Object}
      *
      * @return {Object}
@@ -173,7 +210,7 @@ var ajaxify = (function (window, document, undefined) {
     };
 
     /**
-     * @param {Object|Array}
+     * @param {Object|Array} Data for XMLHttpRequest
      *
      * @return {String}
      */
@@ -198,7 +235,7 @@ var ajaxify = (function (window, document, undefined) {
     };
 
     /**
-     * @param {Object}
+     * @param {Object} Custom settings
      *
      * @return {Object}
      */
@@ -246,7 +283,8 @@ var ajaxify = (function (window, document, undefined) {
             request.open(config.s.method, config.s.url, config.s.async, config.s.username, config.s.password);
         }
 
-        if (request.responseType) {
+
+        if (config.s.responseType !== '') {
             request.responseType = (config.s.allowedResponseTypes[config.s.responseType] ? config.s.allowedResponseTypes[config.s.responseType] : '');
         }
 
@@ -279,10 +317,18 @@ var ajaxify = (function (window, document, undefined) {
                     }
 
                     var response;
-                    response = request.responseText;
-                    if (request.responseXML !== null) {
-                        response = request.responseXML;
+                    if (request.responseType !== '' || request.responseType !== 'document') {
+                        response = request.response;
+                    } else {
+                        if (request.responseText) {
+                            response = request.responseText;
+                        }
+
+                        if (request.responseXML !== null) {
+                            response = request.responseXML;
+                        }
                     }
+
 
                     methods.done.call(methods, response, this.getAllResponseHeaders(), this);
                 } else {
@@ -297,11 +343,11 @@ var ajaxify = (function (window, document, undefined) {
          * @param  {Object}
          */
         request.ontimeout = function (event) {
-            var content = document.getElementsByTagName("body")[0],
+            var body = document.getElementsByTagName("body")[0],
             p = document.createElement('p'),
             msg = document.createTextNode('Loading...');
             p.appendChild(msg);
-            content.appendChild(p);
+            body.appendChild(p);
 
             event.target.open(config.s.method, config.s.url);
 
@@ -346,6 +392,7 @@ var ajaxify = (function (window, document, undefined) {
                 methods.done = callback;
                 return xhrReq;
             },
+
             /**
              * @param  {Function}
              *
@@ -355,6 +402,7 @@ var ajaxify = (function (window, document, undefined) {
                 methods.error = callback;
                 return xhrReq;
             },
+
             /**
              * @param  {Function}
              *
@@ -432,6 +480,15 @@ var ajaxify = (function (window, document, undefined) {
      */
     exports.parseJSON = function (data) {
         return parseJSON(data);
+    };
+
+    /**
+     * @param  {Object}
+     *
+     * @return {Function}
+     */
+    exports.parseBlob = function (data, mimeType, htmlAttrId, ret) {
+        return parseBlob(data, mimeType, htmlAttrId, ret);
     };
 
     return exports;

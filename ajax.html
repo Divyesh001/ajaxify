@@ -14,15 +14,15 @@ var obj = {
 
 ajaxify.ajax({
     url: 'test.php',
+    responseType: 'blob',
     method: "POST",
-    data: obj,
+    data: new Blob(['{ "text": "test" }'], { 'type': 'application/json' }),
     headers: {
         "my-Awes0mE-H3ad3R": "header4e"
     }
 }).done(function (response, headers, XHR) {
-    console.log(response);
-    console.log(headers);
-    console.log(XHR);
+    console.log(response)
+   ajaxify.parseBlob(response, 'image/png', '', true);
 });
 
 </script>
