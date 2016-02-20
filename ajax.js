@@ -28,7 +28,6 @@
  * @license    http://www.opensource.org/licenses/mit-license.php  MIT License
  */
 
-
 var ajaxify = (function (window, document, undefined) {
 
     /**
@@ -341,7 +340,7 @@ var ajaxify = (function (window, document, undefined) {
             /**
              * @param  {Function}
              *
-             * @return {Function}
+             * @return {Object}
              */
             done: function (callback) {
                 methods.done = callback;
@@ -350,7 +349,7 @@ var ajaxify = (function (window, document, undefined) {
             /**
              * @param  {Function}
              *
-             * @return {Function}
+             * @return {Object}
              */
             error: function (callback) {
                 methods.error = callback;
@@ -359,7 +358,7 @@ var ajaxify = (function (window, document, undefined) {
             /**
              * @param  {Function}
              *
-             * @return {Function}
+             * @return {Object}
              */
             always: function (callback) {
                 methods.always = callback;

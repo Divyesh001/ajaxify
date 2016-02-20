@@ -12,17 +12,18 @@ var obj = {
     yes: 'thisIsCamesdgsfglCase'
 };
 
-    ajaxify.ajax({
-        url: 'test.php',
-        method: "GET",
-        headers: {
-            "my-Awes0mE-H3ad3R": "header4e"
-        }
-    }).done(function (response, headers, XHR) {
-        console.log(response);
-        console.log(headers);
-        console.log(XHR);
-    });
+ajaxify.ajax({
+    url: 'test.php',
+    method: "POST",
+    data: obj,
+    headers: {
+        "my-Awes0mE-H3ad3R": "header4e"
+    }
+}).done(function (response, headers, XHR) {
+    console.log(response);
+    console.log(headers);
+    console.log(XHR);
+});
 
 </script>
 </body>
