@@ -8,31 +8,20 @@
 
 
 <script type="text/javascript">
-var formData = new FormData();
-formData.append('da', 'da=da&asd=dsa');
-formData.append('id', 123456);
-
-var j = JSON.stringify({ City: 'Moscow', Age: 25 });
+var obj = {
+    yes: 'thisIsCamelCase'
+};
 
 ajaxify.ajax({
     url: 'test.php',
     method: "POST",
-    data: formData,
-    dataType: "text",
-    processData: false,
-    contentType: false,
+    data: obj,
     headers: {
         "my-Awes0mE-H3ad3R": "header4e"
     }
-}, function (result) {
-    console.log(result)
-
-    // ajaxify.each(ajaxify.parseJSON(result), function(i, data) {
-    //     console.log(i);
-    //     console.log(data);
-    // });
+}, function (res) {
+    console.log(res)
 });
-
 
 </script>
 </body>

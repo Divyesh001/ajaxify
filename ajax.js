@@ -70,7 +70,7 @@
             processData: true,
             headers: {},
             crossOrigin: false,
-            responseType: "",
+            responseType: "", // XHR2
             allowedResponseTypes: {
                 "": "''",
                 "arraybuffer": "arraybuffer",
@@ -183,7 +183,6 @@
                     add(index, value);
                 });
             } else {
-
                 for (var prop in data) {
                     if (data.hasOwnProperty(prop)) {
                         var k = encodeURIComponent(prop),
@@ -202,9 +201,9 @@
          * @param {Callback} err
          */
         ajax: function (settings, done, err) {
-            if (typeof done !== 'function') {
-                throw new Error('Second parameter must be a callback');
-            }
+            // if (typeof done !== 'function') {
+            //     throw new Error('Second parameter must be a callback');
+            // }
 
             this.s = this.getSettings(settings);
 
@@ -266,8 +265,7 @@
              * Listen for specific event triggers
              */
             this.request.onload = function () {
-                if (this.readyState === 4) {
-                    if (this.status >= 200 && this.status < 300) {
+                if (this.readyState === 4 && this.status >= 200 && this.status < 300) {
                         // Clear timeout if it exists
                         if (this.timeoutTimer) {
                             window.clearTimeout(this.timeoutTimer);
@@ -280,25 +278,22 @@
                         }
 
                         done(response, this.getAllResponseHeaders(), this);
-                    } else {
-                        ajaxify.showAjaxErrors(err);
-                    }
+                } else {
+                    ajaxify.showAjaxErrors(err);
                 }
             };
 
             this.request.ontimeout = function (event) {
                 var content = document.getElementsByTagName("body")[0],
-                    p = document.createElement('p'),
-                    msg = document.createTextNode('Just a little bit longer!');
-                    p.appendChild(msg);
-                    content.appendChild(p);
+                p = document.createElement('p'),
+                msg = document.createTextNode('Loading...');
+                p.appendChild(msg);
+                content.appendChild(p);
 
-                    // Restarts the request.
-                    event.target.open(ajaxify.s.method, ajaxify.s.url);
+                event.target.open(ajaxify.s.method, ajaxify.s.url);
 
-                    // Optionally, set a longer timeout to override the original.
-                    event.target.timeout = ajaxify.s.timeout + 5000;
-                    event.target.send(ajaxify.s.data);
+                event.target.timeout = ajaxify.s.timeout + 5000;
+                event.target.send(ajaxify.s.data);
             };
 
             this.request.onerror = function () {
@@ -321,13 +316,13 @@
                 // https://developer.mozilla.org/en-US/docs/Web/API/XDomainRequest
                 setTimeout(function() {
                     this.request.send(this.s.method !== "GET" ? this.s.data : null);
-                }, 0);
+                }, 4);
             }
             else {
                 this.request.send(this.s.method !== "GET" ? this.s.data : null);
             }
 
-            return this;
+            return ajaxify;
         },
 
         /**
@@ -361,14 +356,5 @@
         },
     };
 
-    if (typeof module === "object" && module && typeof module.exports === "object") {
-        module.exports = ajaxify;
-    } else {
-        window.ajaxify = ajaxify;
-        if (typeof define === "function" && define.amd) {
-            define( "ajaxify", [], function () {
-                return ajaxify;
-            });
-        }
-    }
+    window.ajaxify = ajaxify;
 })(window, document);
