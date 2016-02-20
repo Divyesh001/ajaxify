@@ -29,15 +29,7 @@
  */
 
 
-(function (window, factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(factory);
-    } else if (typeof exports === 'object') {
-        module.exports = factory;
-    } else {
-        window.ajaxify = factory(window, document);
-    }
-})(this, function (window, document, undefined) {
+var ajaxify = (function (window, document, undefined) {
 
     /**
      * The use of 'use strict' might crash some libs and ASP.NET
@@ -444,4 +436,4 @@
     };
 
     return exports;
-});
+})(window, document);
