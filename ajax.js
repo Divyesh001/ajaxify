@@ -29,7 +29,15 @@
  */
 
 
-;(function (window, document, undefined) {
+(function (window, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(factory);
+    } else if (typeof exports === 'object') {
+        module.exports = factory;
+    } else {
+        window.ajaxify = factory(window, document);
+    }
+})(this, function (window, document, undefined) {
 
     /**
      * The use of 'use strict' might crash some libs and ASP.NET
@@ -37,9 +45,8 @@
      */
     'use strict';
 
-    // timeout handler
-    var ajaxify = {
-
+    var exports = {};
+    var config = {
         /**
          * Default settings
          */
@@ -47,7 +54,6 @@
         r20: /%20/g,
         rquery: ( /\?/ ),
         s: {},  // holds the extended settings object
-        request: null,
         xdr: false,
         settings: {
             accepts: {
@@ -79,282 +85,363 @@
                 "json": "json",
                 "text": "text"
             }
-        },
-
-        /**
-         * @param {Object} obj the passed object
-         * @param {Object} src the original object
-         */
-        merge: function (obj, src) {
-            for (var key in src) {
-                if (obj.hasOwnProperty(key)) {
-                    src[key] = obj[key];
-                }
-            }
-
-            return src;
-        },
-
-        /**
-         * http://caniuse.com/#feat=xhr2
-         * https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
-         *
-         * @return {Int} The XMLHttpRequest version
-         */
-        detectXMLHttpVersion: function () {
-            if ('FormData' in window) {
-                return 2;
-            }
-
-            return 1;
-        },
-
-        /**
-         * @param {Object} data The XMLHttpRequest responseText
-         */
-        parseJSON: function (data) {
-            try {
-                return JSON.parse(data);
-            } catch (e) {
-                return [e, data];
-            }
-        },
-
-        setHeaders: function () {
-            if (this.s.contentType !== false) {
-                this.request.setRequestHeader("Content-type", this.s.contentType);
-            }
-
-            this.request.setRequestHeader("Accept", this.s.accepts[this.s.dataType] ? this.s.accepts[this.s.dataType] : this.s.accepts["*"]);
-            this.request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
-            // Check for headers option
-            for (var i in this.s.headers) {
-                if (this.s.headers.hasOwnProperty(i)) {
-                    this.request.setRequestHeader(i, this.s.headers[i]);
-                }
-            }
-
-            return this;
-        },
-
-
-        /**
-         * @param {Callback} err
-         */
-        showAjaxErrors: function (err) {
-            if (typeof err === 'function') {
-                err(this.request.error, this.request.statusText, this.request.status, this.request.responseText, this.request.getAllResponseHeaders());
-            } else {
-                console.error("Status text: " + this.request.statusText);
-                console.error("XHR error: " + this.request.error);
-                console.error("Status: " + this.request.status);
-                console.error("Response text: " + this.request.responseText);
-            }
-
-            this.abort();
-
-            return this;
-        },
-
-        /**
-         * @param {Object} settings
-         */
-        getSettings: function(settings) {
-            if (typeof settings === 'object') {
-                return this.merge(settings, this.settings);
-            } else {
-                return this.settings;
-            }
-        },
-
-        /**
-         * @param {Object|Array} data
-         */
-        convertDataToText: function(data) {
-            var pairs = [],
-                    add = function(key, value) {
-                        // If value is a function, invoke it and return its value
-                        value = typeof value === 'function' ? value() : (value === null ? "" : value);
-                        pairs[pairs.length] = encodeURIComponent(key) + "=" + encodeURIComponent(value);
-                    };
-            if (Array.isArray(data)) {
-                ajaxify.each(data, function(index, value) {
-                    add(index, value);
-                });
-            } else {
-                for (var prop in data) {
-                    if (data.hasOwnProperty(prop)) {
-                        var k = encodeURIComponent(prop),
-                            v = encodeURIComponent(data[prop]);
-                        pairs.push( k + "=" + v);
-                    }
-                }
-            }
-
-            return pairs.join("&").replace(this.r20, "+");
-        },
-
-        /**
-         * @param {Object} settings
-         * @param {Callback} done
-         * @param {Callback} err
-         */
-        ajax: function (settings, done, err) {
-            // if (typeof done !== 'function') {
-            //     throw new Error('Second parameter must be a callback');
-            // }
-
-            this.s = this.getSettings(settings);
-
-            if (typeof this.s.data !== 'string' && this.s.processData && this.s.data) {
-                this.s.data = this.convertDataToText(this.s.data);
-            }
-
-            /**
-             * IE 5.5+ and any other browser
-             */
-            this.request = new (window.XMLHttpRequest || window.ActiveXObject)('MSXML2.XMLHTTP.3.0');
-            this.s.method = this.s.method.toUpperCase() || 'GET';
-            if(this.s.crossOrigin) {
-                if(!('withCredentials' in this.request) && window.XDomainRequest) {
-                    this.request = new XDomainRequest();
-                    this.xdr = true;
-                }
-            }
-
-            /**
-             * Normalize URL
-             */
-            if (this.s.method === 'GET') {
-                this.s.url = (this.s.url += (this.rquery.test(this.s.url) ? "&" : "?") + (this.s.data !== null ? this.s.data : ''));
-            }
-
-            /**
-             * Open socket
-             */
-            if (this.xdr) {
-                this.request.open(this.s.method, this.s.url);
-            } else {
-                if (this.detectXMLHttpVersion() === 2 && this.s.async === true) {
-                    this.request.withCredentials = this.s.withCredentials;
-                }
-                this.request.open(this.s.method, this.s.url, this.s.async, this.s.username, this.s.password);
-            }
-
-            if (this.request.responseType) {
-                this.request.responseType = (this.s.allowedResponseTypes[this.s.responseType] ? this.s.allowedResponseTypes[this.s.responseType] : '');
-            }
-
-            /**
-             * Set all headers
-             */
-            this.setHeaders();
-
-            /**
-             * See if we can set request timeout
-             */
-            if (this.detectXMLHttpVersion() === 2 && this.s.async === true && this.s.timeout > 0) {
-                this.request.timeout = this.s.timeout;
-                this.timeoutTimer = window.setTimeout(function() {
-                    ajaxify.request.abort("timeout");
-                }, ajaxify.s.timeout);
-            }
-
-            /**
-             * Listen for specific event triggers
-             */
-            this.request.onload = function () {
-                if (this.readyState === 4 && this.status >= 200 && this.status < 300) {
-                        // Clear timeout if it exists
-                        if (this.timeoutTimer) {
-                            window.clearTimeout(this.timeoutTimer);
-                        }
-
-                        var response;
-                        response = this.responseText;
-                        if (ajaxify.s.dataType === 'xml') {
-                            response = this.responseXML;
-                        }
-
-                        done(response, this.getAllResponseHeaders(), this);
-                } else {
-                    ajaxify.showAjaxErrors(err);
-                }
-            };
-
-            this.request.ontimeout = function (event) {
-                var content = document.getElementsByTagName("body")[0],
-                p = document.createElement('p'),
-                msg = document.createTextNode('Loading...');
-                p.appendChild(msg);
-                content.appendChild(p);
-
-                event.target.open(ajaxify.s.method, ajaxify.s.url);
-
-                event.target.timeout = ajaxify.s.timeout + 5000;
-                event.target.send(ajaxify.s.data);
-            };
-
-            this.request.onerror = function () {
-                ajaxify.showAjaxErrors(err);
-            };
-
-            this.request.upload.onprogress = function(e) {
-                if (e.lengthComputable) {
-                    document.value = (e.loaded / e.total) * 100;
-                    document.textContent = document.value; // Fallback for unsupported browsers.
-                }
-            };
-
-            // Send request
-            if(this.xdr) {
-                // http://cypressnorth.com/programming/internet-explorer-aborting-ajax-requests-fixed/
-                this.request.onprogress = function(){};
-                this.request.ontimeout = function(){};
-                this.request.onerror = function(){};
-                // https://developer.mozilla.org/en-US/docs/Web/API/XDomainRequest
-                setTimeout(function() {
-                    this.request.send(this.s.method !== "GET" ? this.s.data : null);
-                }, 4);
-            }
-            else {
-                this.request.send(this.s.method !== "GET" ? this.s.data : null);
-            }
-
-            return ajaxify;
-        },
-
-        /**
-         * @param {Object|Array} obj
-         * @param {Callback} callback
-         */
-        each: function (obj, callback) {
-            var i = 0;
-
-            if (Array.isArray(obj)) {
-                Array.prototype.forEach.call(obj, callback);
-            } else {
-                for (i in obj) {
-                    if (callback.call(obj[i], i, obj[i] ) === false) {
-                        break;
-                    }
-                }
-            }
-
-            return obj;
-        },
-
-        abort: function () {
-            if (this.request) {
-                this.request.onreadystatechange = function () {};
-                this.request.abort();
-                this.request = null;
-            }
-
-            return this;
-        },
+        }
     };
 
-    window.ajaxify = ajaxify;
-})(window, document);
+    /**
+     * @param {Object} obj the passed object
+     * @param {Object} src the original object
+     *
+     * @return {Object}
+     */
+    var merge = function (obj, src) {
+        for (var key in src) {
+            if (obj.hasOwnProperty(key)) {
+                src[key] = obj[key];
+            }
+        }
+
+        return src;
+    };
+
+    /**
+     * http://caniuse.com/#feat=xhr2
+     * https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+     *
+     * @return {Int} The XMLHttpRequest version
+     */
+    var detectXMLHttpVersion = function () {
+        if ('FormData' in window) {
+            return 2;
+        }
+
+        return 1;
+    };
+
+    /**
+     * @param {Object}
+     *
+     * @return {Object|Array}
+     */
+    var parseJSON = function (data) {
+        try {
+            return JSON.parse(data);
+        } catch (e) {
+            return [e, data];
+        }
+    };
+
+    /**
+     * @param  {Object}
+     *
+     * @return {Object}
+     */
+    var getSettings = function (settings) {
+        if (typeof settings === 'object') {
+            return merge(settings, config.settings);
+        }
+
+        return settings;
+    };
+
+    /**
+     * @param  {Object}
+     *
+     * @return {Object}
+     */
+    var setHeaders = function (request) {
+        if (config.s.contentType !== false) {
+            request.setRequestHeader("Content-type", config.s.contentType);
+        }
+
+        request.setRequestHeader("Accept", config.s.accepts[config.s.dataType] ? config.s.accepts[config.s.dataType] : config.s.accepts["*"]);
+        request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        // Check for headers option
+        for (var i in config.s.headers) {
+            if (config.s.headers.hasOwnProperty(i)) {
+                request.setRequestHeader(i, config.s.headers[i]);
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * @param  {Object}
+     * @param  {Object}
+     *
+     * @return {Object}
+     */
+    var showAjaxErrors = function (request, methods) {
+        methods.error.call(methods, request);
+
+        abort(request);
+
+        return this;
+    };
+
+    /**
+     * @param {Object|Array}
+     *
+     * @return {String}
+     */
+    var convertDataToString = function (data) {
+        var pairs = [];
+        if (Array.isArray(data)) {
+            each(data, function (index, value) {
+                value = typeof value === 'function' ? value() : (value === null ? "" : value);
+                pairs[pairs.length] = encodeURIComponent(index) + "=" + encodeURIComponent(value);
+            });
+        } else {
+            for (var prop in data) {
+                if (data.hasOwnProperty(prop)) {
+                    var k = encodeURIComponent(prop),
+                        v = encodeURIComponent(data[prop]);
+                    pairs.push( k + "=" + v);
+                }
+            }
+        }
+
+        return pairs.join("&").replace(config.r20, "+");
+    };
+
+    /**
+     * @param {Object}
+     *
+     * @return {Object}
+     */
+    var xhr = function (settings) {
+        var methods = {
+            done: function () {},
+            error: function () {},
+            always: function () {}
+        };
+        config.s = getSettings(settings);
+
+        /**
+         * IE 5.5+ and any other browser
+         */
+        var request = new (window.XMLHttpRequest || window.ActiveXObject)('MSXML2.XMLHTTP.3.0');
+
+        if (typeof config.s.data !== 'string' && config.s.processData && config.s.data) {
+            config.s.data = convertDataToString(config.s.data);
+        }
+
+        config.s.method = config.s.method.toUpperCase() || 'GET';
+        if(config.s.crossOrigin) {
+            if(!('withCredentials' in request) && window.XDomainRequest) {
+                request = new XDomainRequest();
+                config.xdr = true;
+            }
+        }
+
+        /**
+         * Normalize URL
+         */
+        if (config.s.method === 'GET') {
+            config.s.url = (config.s.url += (config.rquery.test(config.s.url) ? "&" : "?") + (config.s.data !== null ? config.s.data : ''));
+        }
+
+        /**
+         * Open socket
+         */
+        if (config.xdr) {
+            request.open(config.s.method, config.s.url);
+        } else {
+            if (detectXMLHttpVersion() === 2 && config.s.async === true) {
+                request.withCredentials = config.s.withCredentials;
+            }
+            request.open(config.s.method, config.s.url, config.s.async, config.s.username, config.s.password);
+        }
+
+        if (request.responseType) {
+            request.responseType = (config.s.allowedResponseTypes[config.s.responseType] ? config.s.allowedResponseTypes[config.s.responseType] : '');
+        }
+
+        /**
+         * Set all headers
+         */
+        setHeaders(request);
+
+        /**
+         * See if we can set request timeout
+         */
+        if (detectXMLHttpVersion() === 2 && config.s.async === true && config.s.timeout > 0) {
+            request.timeout = config.s.timeout;
+        } else {
+            config.timeoutTimer = window.setTimeout(function () {
+                request.abort("timeout");
+            }, config.s.timeout);
+        }
+
+        /**
+         * Listen for specific event triggers
+         */
+        request.onload = function () {
+            if (request.readyState === 4) {
+                if (request.status >= 200 && request.status < 300) {
+
+                    // Clear timeout if it exists
+                    if (config.timeoutTimer) {
+                        window.clearTimeout(config.timeoutTimer);
+                    }
+
+                    var response;
+                    response = request.responseText;
+                    if (config.s.dataType === 'xml') {
+                        response = request.responseXML;
+                    }
+
+                    methods.done.call(methods, response, this.getAllResponseHeaders(), this);
+                } else {
+                    showAjaxErrors(request, methods);
+                }
+
+                methods.always.call(methods, request);
+            }
+        };
+
+        /**
+         * @param  {Object}
+         */
+        request.ontimeout = function (event) {
+            var content = document.getElementsByTagName("body")[0],
+            p = document.createElement('p'),
+            msg = document.createTextNode('Loading...');
+            p.appendChild(msg);
+            content.appendChild(p);
+
+            event.target.open(config.s.method, config.s.url);
+
+            event.target.timeout = config.s.timeout + 5000;
+            event.target.send(config.s.data);
+        };
+
+        request.onerror = function () {
+            showAjaxErrors(request, methods);
+        };
+
+        /**
+         * @param  {Object}
+         */
+        request.upload.onprogress = function (event) {
+            if (event.lengthComputable) {
+                document.value = (event.loaded / event.total) * 100;
+                document.textContent = document.value; // Fallback for unsupported browsers.
+            }
+        };
+
+        if(config.xdr) {
+            // http://cypressnorth.com/programming/internet-explorer-aborting-ajax-requests-fixed/
+            request.onprogress = function (){};
+            request.ontimeout = function (){};
+            request.onerror = function (){};
+            // https://developer.mozilla.org/en-US/docs/Web/API/XDomainRequest
+            setTimeout(function () {
+                request.send(config.s.method !== "GET" ? config.s.data : null);
+            }, 4); // 4 is the minimum time. It's hard coded in the browser.
+        } else {
+            request.send(config.s.method !== "GET" ? config.s.data : null);
+        }
+
+        var xhrReq = {
+            /**
+             * @param  {Function}
+             *
+             * @return {Function}
+             */
+            done: function (callback) {
+                methods.done = callback;
+                return xhrReq;
+            },
+            /**
+             * @param  {Function}
+             *
+             * @return {Function}
+             */
+            error: function (callback) {
+                methods.error = callback;
+                return xhrReq;
+            },
+            /**
+             * @param  {Function}
+             *
+             * @return {Function}
+             */
+            always: function (callback) {
+                methods.always = callback;
+                return xhrReq;
+            }
+        };
+
+        return xhrReq;
+    };
+
+    /**
+     * @param {Object|Array}
+     * @param {Function}
+     *
+     * @return {Object}
+     */
+    var each = function (obj, callback) {
+        var i = 0;
+
+        if (Array.isArray(obj)) {
+            Array.prototype.forEach.call(obj, callback);
+        } else {
+            for (i in obj) {
+                if (callback.call(obj[i], i, obj[i] ) === false) {
+                    break;
+                }
+            }
+        }
+
+        return obj;
+    };
+
+    /**
+     * @param  {Object} XMLHttpRequest
+     *
+     * @return {Function}
+     */
+    var abort = function (request) {
+        if (request) {
+            request.onreadystatechange = function () {};
+            request.abort();
+            request = null;
+        }
+
+        return this;
+    };
+
+    /**
+     * @param  {Object}
+     *
+     * @return {Function}
+     */
+    exports.ajax = function (settings) {
+        return xhr(settings);
+    };
+
+    /**
+     * @param  {Object}
+     * @param  {Object}
+     *
+     * @return {Function}
+     */
+    exports.each = function (obj, callback) {
+        return each(obj, callback);
+    };
+
+    /**
+     * @param  {Object}
+     *
+     * @return {Function}
+     */
+    exports.parseJSON = function (data) {
+        return parseJSON(data);
+    };
+
+    return exports;
+});

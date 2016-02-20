@@ -9,7 +9,7 @@
 
 <script type="text/javascript">
 var obj = {
-    yes: 'thisIsCamelCase'
+    yes: 'thisIsCamesdgsfglCase'
 };
 
 ajaxify.ajax({
@@ -19,8 +19,10 @@ ajaxify.ajax({
     headers: {
         "my-Awes0mE-H3ad3R": "header4e"
     }
-}, function (res) {
-    console.log(res)
+}).done(function (response, headers, XHR) {
+    console.log(response);
+    console.log(headers);
+    console.log(XHR);
 });
 
 </script>

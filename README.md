@@ -3,7 +3,7 @@ Ajax library with similar syntax like jQuery
 
 # How to use:
 
-## FormData
+### FormData
     var formData = new FormData();
     formData.append('da', 'da=da&asd=dsa');
     formData.append('id', 123456);
@@ -18,11 +18,13 @@ Ajax library with similar syntax like jQuery
         headers: {
             "my-Awes0mE-H3ad3R": "header4e"
         }
-    }, function (res) {
-        console.log(res)
+    }).done(function (response, headers, XHR) {
+        console.log(response);
+        console.log(headers);
+        console.log(XHR);
     });
 
-## Array
+### Array
 
     var arr = [10, 20, 30, 'yes', 'no'];
 
@@ -33,11 +35,13 @@ Ajax library with similar syntax like jQuery
         headers: {
             "my-Awes0mE-H3ad3R": "header4e"
         }
-    }, function (res) {
-        console.log(res)
+    }).done(function (response, headers, XHR) {
+        console.log(response);
+        console.log(headers);
+        console.log(XHR);
     });
 
-## Text
+### Text
 
     var t = "yes=thisisatext&nothisisnotatext";
 
@@ -48,11 +52,13 @@ Ajax library with similar syntax like jQuery
         headers: {
             "my-Awes0mE-H3ad3R": "header4e"
         }
-    }, function (res) {
-        console.log(res)
+    }).done(function (response, headers, XHR) {
+        console.log(response);
+        console.log(headers);
+        console.log(XHR);
     });
 
-## Object
+### Object
 
     var obj = {
         yes: 'thisIsCamelCase'
@@ -65,6 +71,8 @@ Ajax library with similar syntax like jQuery
         headers: {
             "my-Awes0mE-H3ad3R": "header4e"
         }
-    }, function (res) {
-        console.log(res)
+    }).done(function (response, headers, XHR) {
+        console.log(response);
+        console.log(headers);
+        console.log(XHR);
     });
