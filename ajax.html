@@ -6,25 +6,23 @@
 </head>
 <body>
 
+<img src="" id="asd">
 
 <script type="text/javascript">
 var obj = {
     yes: 'thisIsCamesdgsfglCase'
 };
 
-ajaxify.ajax({
-    url: 'test.php',
-    responseType: 'blob',
-    method: "POST",
-    data: new Blob(['{ "text": "test" }'], { 'type': 'application/json' }),
-    headers: {
-        "my-Awes0mE-H3ad3R": "header4e"
-    }
-}).done(function (response, headers, XHR) {
-    console.log(response)
-   ajaxify.parseBlob(response, 'image/png', '', true);
-});
-
+    ajaxify.ajax({
+        url: 'ajax-icon-big.jpg',
+        responseType: 'blob',
+        method: "GET",
+        headers: {
+            "my-Awes0mE-H3ad3R": "header4e"
+        }
+    }).done(function (response, headers, XHR) {
+        ajaxify.parseBlob(response, 'image/jpeg', '', true);
+    });
 </script>
 </body>
 </html>

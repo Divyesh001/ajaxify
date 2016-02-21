@@ -42,8 +42,6 @@ var ajaxify = (function (window, document, undefined) {
          * Default settings
          */
         timeoutTimer: null,
-        r20: /%20/g,
-        rquery: ( /\?/ ),
         s: {},  // holds the extended settings object
         xdr: false,
         settings: {
@@ -128,35 +126,101 @@ var ajaxify = (function (window, document, undefined) {
      * @param  {String} HTML attr where we want to append the data
      * @param  {Boolean} Determinates if it should return the blob url or append to element
      *
-     * @return {String|Void}
+     * @return {String}
      */
-    var parseBlob = function (data, mimeType, htmlAttrId, ret) {
-        var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
-        if(BlobBuilder) {
-            // android
-            var builder = new BlobBuilder();
-            builder.append([data]);
-            var blob = builder.getBlob(mimeType);
-        } else {
-            var blob = new Blob([data], {type: mimeType});
-        }
-
-        var url = (window.URL || window.webkitURL || window.mozURL || window.msURL).createObjectURL(blob);
-
-        if (ret === true) {
-            if (!htmlAttrId || typeof htmlAttrId !== 'string') {
-                var content = document.getElementsByTagName("body")[0],
-                img2 = document.createElement('img');
-                img2.setAttribute("id", 'my_auto_gen_id_tag');
-                content.appendChild(img2);
-                htmlAttrId = '#my_auto_gen_id_tag';
+    var parseBlob = function (data, mimeType, htmlAttr, append) {
+        try {
+           var blob;
+            var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
+            if(BlobBuilder) {
+                // android
+                var builder = new BlobBuilder();
+                builder.append([data]);
+                blob = builder.getBlob(mimeType);
+            } else {
+                blob = new Blob([data], {type: mimeType});
             }
 
-            var img = document.querySelector(htmlAttrId);
-            img.src = url;
-        }
+            var url = (window.URL || window.webkitURL || window.mozURL || window.msURL).createObjectURL(blob);
 
-        return url;
+            if (append === true) {
+                if (!htmlAttr || typeof htmlAttr !== 'string') {
+                    var content = document.getElementsByTagName("body")[0],
+                    img = document.createElement('img');
+                    img.setAttribute("id", 'my_blob_id');
+                    content.appendChild(img);
+                    htmlAttr = "#my_blob_id";
+                }
+                document.querySelector(htmlAttr).src = url;
+            } else {
+                return url;
+            }
+
+        } catch (e) {
+            return [e, data];
+        }
+    };
+
+    /**
+     * @param {String}
+     * @param {String} If it's not a valid mime type, the browser will throw an error
+     *
+     * @return {Object|Array}
+     */
+    var parseXML = function (data, mimeType) {
+        var xml;
+
+        try {
+            if (window.DOMParser) {
+                xml = new window.DOMParser().parseFromString(data, (mimeType !== undefined ? mimeType : config.s.accepts.xml));
+            } else {
+                xml = new window.ActiveXObject("Microsoft.XMLDOM");
+                xml.async = false;
+                xml.loadXML(data);
+            }
+
+            return xml;
+        } catch (e) {
+            return [e, xml];
+        }
+    };
+
+    /**
+     * @param  {Array} The data from the XHR response passed as array
+     * @param  {String} Resource mime type
+     * @param  {String} HTML attr where we want to append the data
+     * @param  {Boolean} Determinates if it should return the blob url or append to element
+     *
+     * @return {String}
+     */
+    var parseArrayBuffer = function (data, mimeType, htmlAttr, ret) {
+        try {
+            var uInt8Array = new Uint8Array(data);
+            var i = uInt8Array.length;
+            var binaryString = new Array(i);
+            while (i--) {
+                binaryString[i] = String.fromCharCode(uInt8Array[i]);
+            }
+
+            data = binaryString.join('');
+            data = "data:"+mimeType+";base64,"+window.btoa(data);
+            if (ret === true) {
+                if (!htmlAttr || typeof htmlAttr !== 'string') {
+                    var content = document.getElementsByTagName("body")[0],
+                    img = document.createElement('img');
+                    img.setAttribute("id", 'my_arraybuffer_id');
+                    content.appendChild(img);
+                    htmlAttr = "#my_arraybuffer_id";
+                }
+                document.querySelector(htmlAttr).src = data;
+
+            } else {
+                return data;
+            }
+
+        } catch (e) {
+            return [e, data];
+        }
     };
 
     /**
@@ -231,7 +295,7 @@ var ajaxify = (function (window, document, undefined) {
             }
         }
 
-        return pairs.join("&").replace(config.r20, "+");
+        return pairs.join("&").replace('/%20/g', "+");
     };
 
     /**
@@ -259,7 +323,7 @@ var ajaxify = (function (window, document, undefined) {
         config.s.method = config.s.method.toUpperCase() || 'GET';
         if(config.s.crossOrigin) {
             if(!('withCredentials' in request) && window.XDomainRequest) {
-                request = new XDomainRequest();
+                request = new window.XDomainRequest();
                 config.xdr = true;
             }
         }
@@ -268,7 +332,7 @@ var ajaxify = (function (window, document, undefined) {
          * Normalize URL
          */
         if (config.s.method === 'GET') {
-            config.s.url = (config.s.url += (config.rquery.test(config.s.url) ? "&" : "?") + (config.s.data !== null ? config.s.data : ''));
+            config.s.url = (config.s.url += ((/\?/).test(config.s.url) ? "&" : "?") + (config.s.data !== null ? config.s.data : ''));
         }
 
         /**
@@ -277,20 +341,16 @@ var ajaxify = (function (window, document, undefined) {
         if (config.xdr) {
             request.open(config.s.method, config.s.url);
         } else {
-            if (detectXMLHttpVersion() === 2 && config.s.async === true) {
+            if ('withCredentials' in request) {
                 request.withCredentials = config.s.withCredentials;
             }
             request.open(config.s.method, config.s.url, config.s.async, config.s.username, config.s.password);
         }
 
-
-        if (config.s.responseType !== '') {
+        if (config.s.responseType !== '' && detectXMLHttpVersion() === 2) {
             request.responseType = (config.s.allowedResponseTypes[config.s.responseType] ? config.s.allowedResponseTypes[config.s.responseType] : '');
         }
 
-        /**
-         * Set all headers
-         */
         setHeaders(request);
 
         /**
@@ -309,24 +369,16 @@ var ajaxify = (function (window, document, undefined) {
          */
         request.onload = function () {
             if (request.readyState === 4) {
-                if (request.status >= 200 && request.status < 300) {
-
-                    // Clear timeout if it exists
+                if (request.status >= 200 && request.status < 400) {
                     if (config.timeoutTimer) {
                         window.clearTimeout(config.timeoutTimer);
                     }
 
                     var response;
-                    if (request.responseType !== '' || request.responseType !== 'document') {
+                    if (request.response) {
                         response = request.response;
-                    } else {
-                        if (request.responseText) {
-                            response = request.responseText;
-                        }
-
-                        if (request.responseXML !== null) {
-                            response = request.responseXML;
-                        }
+                    } else if (request.responseType === "text" || !request.responseType) {
+                        response = request.responseText || request.responseXML;
                     }
 
 
@@ -369,6 +421,9 @@ var ajaxify = (function (window, document, undefined) {
             }
         };
 
+        /**
+         * Send data
+         */
         if(config.xdr) {
             // http://cypressnorth.com/programming/internet-explorer-aborting-ajax-requests-fixed/
             request.onprogress = function (){};
@@ -382,6 +437,9 @@ var ajaxify = (function (window, document, undefined) {
             request.send(config.s.method !== "GET" ? config.s.data : null);
         }
 
+        /**
+         * Chaining methods
+         */
         var xhrReq = {
             /**
              * @param  {Function}
@@ -390,6 +448,7 @@ var ajaxify = (function (window, document, undefined) {
              */
             done: function (callback) {
                 methods.done = callback;
+
                 return xhrReq;
             },
 
@@ -400,6 +459,7 @@ var ajaxify = (function (window, document, undefined) {
              */
             error: function (callback) {
                 methods.error = callback;
+
                 return xhrReq;
             },
 
@@ -410,6 +470,7 @@ var ajaxify = (function (window, document, undefined) {
              */
             always: function (callback) {
                 methods.always = callback;
+
                 return xhrReq;
             }
         };
@@ -446,7 +507,7 @@ var ajaxify = (function (window, document, undefined) {
      */
     var abort = function (request) {
         if (request) {
-            request.onreadystatechange = function () {};
+            request.onload = function () {};
             request.abort();
             request = null;
         }
@@ -487,8 +548,26 @@ var ajaxify = (function (window, document, undefined) {
      *
      * @return {Function}
      */
-    exports.parseBlob = function (data, mimeType, htmlAttrId, ret) {
-        return parseBlob(data, mimeType, htmlAttrId, ret);
+    exports.parseXML = function (data) {
+        return parseXML(data);
+    };
+
+    /**
+     * @param  {Object}
+     *
+     * @return {Function}
+     */
+    exports.parseBlob = function (data, mimeType, htmlAttr, append) {
+        return parseBlob(data, mimeType, htmlAttr, append);
+    };
+
+    /**
+     * @param  {Object}
+     *
+     * @return {Function}
+     */
+    exports.parseArrayBuffer = function (data, mimeType, htmlAttr, append) {
+        return parseArrayBuffer(data, mimeType, htmlAttr, append);
     };
 
     return exports;
