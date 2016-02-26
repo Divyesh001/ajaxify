@@ -155,7 +155,6 @@ var ajaxify = (function (window, document, undefined) {
             } else {
                 return url;
             }
-
         } catch (e) {
             return [e, data];
         }
@@ -168,20 +167,19 @@ var ajaxify = (function (window, document, undefined) {
      * @return {Object|Array}
      */
     var parseXML = function (data, mimeType) {
-        var xml;
-
         try {
             if (window.DOMParser) {
-                xml = new window.DOMParser().parseFromString(data, (mimeType !== undefined ? mimeType : config.s.accepts.xml));
+                return new window.DOMParser().parseFromString(data, (mimeType !== undefined ? mimeType : config.s.accepts.xml));
             } else {
+                var xml;
                 xml = new window.ActiveXObject("Microsoft.XMLDOM");
                 xml.async = false;
                 xml.loadXML(data);
-            }
 
-            return xml;
+                return xml;
+            }
         } catch (e) {
-            return [e, xml];
+            return e;
         }
     };
 
@@ -213,11 +211,9 @@ var ajaxify = (function (window, document, undefined) {
                     htmlAttr = "#my_arraybuffer_id";
                 }
                 document.querySelector(htmlAttr).src = data;
-
             } else {
                 return data;
             }
-
         } catch (e) {
             return [e, data];
         }
@@ -282,15 +278,12 @@ var ajaxify = (function (window, document, undefined) {
         var pairs = [];
         if (Array.isArray(data)) {
             each(data, function (index, value) {
-                value = typeof value === 'function' ? value() : (value === null ? "" : value);
                 pairs[pairs.length] = encodeURIComponent(index) + "=" + encodeURIComponent(value);
             });
         } else {
             for (var prop in data) {
                 if (data.hasOwnProperty(prop)) {
-                    var k = encodeURIComponent(prop),
-                        v = encodeURIComponent(data[prop]);
-                    pairs.push( k + "=" + v);
+                    pairs.push(encodeURIComponent(prop) + "=" + encodeURIComponent(data[prop]));
                 }
             }
         }
@@ -332,13 +325,13 @@ var ajaxify = (function (window, document, undefined) {
          * Normalize URL
          */
         if (config.s.method === 'GET') {
-            config.s.url = (config.s.url += ((/\?/).test(config.s.url) ? "&" : "?") + (config.s.data !== null ? config.s.data : ''));
+            config.s.url = (config.s.url += ((/\?/).test(config.s.url) ? "&" : "?") + (config.s.data !== null ? config.s.data : '') + '&time=' + new Date().getTime());
         }
 
         /**
          * Open socket
          */
-        if (config.xdr) {
+        if (config.xdr === true) {
             request.open(config.s.method, config.s.url);
         } else {
             if ('withCredentials' in request) {
@@ -364,10 +357,19 @@ var ajaxify = (function (window, document, undefined) {
             }, config.s.timeout);
         }
 
+        // make it configurable via user
+        request.onloadstart = function () {
+            var body = document.getElementsByTagName("body")[0],
+            p = document.createElement('p'),
+            msg = document.createTextNode('Loading...');
+            p.appendChild(msg);
+            body.appendChild(p);
+        };
+
         /**
          * Listen for specific event triggers
          */
-        request.onload = function () {
+        request.onload = request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.status >= 200 && request.status < 400) {
                     if (config.timeoutTimer) {
@@ -381,7 +383,6 @@ var ajaxify = (function (window, document, undefined) {
                         response = request.responseText || request.responseXML;
                     }
 
-
                     methods.done.call(methods, response, this.getAllResponseHeaders(), this);
                 } else {
                     showAjaxErrors(request, methods);
@@ -389,6 +390,15 @@ var ajaxify = (function (window, document, undefined) {
 
                 methods.always.call(methods, request);
             }
+        };
+
+        // make it configurable via user
+        request.onloadend = function () {
+            var body = document.getElementsByTagName("body")[0],
+            p = document.createElement('p'),
+            msg = document.createTextNode('Loading done');
+            p.appendChild(msg);
+            body.appendChild(p);
         };
 
         /**
@@ -491,7 +501,7 @@ var ajaxify = (function (window, document, undefined) {
             Array.prototype.forEach.call(obj, callback);
         } else {
             for (i in obj) {
-                if (callback.call(obj[i], i, obj[i] ) === false) {
+                if (callback.call(obj[i], i, obj[i]) === false) {
                     break;
                 }
             }
