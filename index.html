@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Ajaxify by Stanimirdim92</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Ajaxify</h1>
+      <h2 class="project-tagline">Vanilla javascript Ajax library with similar syntax like jQuery</h2>
+      <a href="https://github.com/Stanimirdim92/ajaxify" class="btn">View on GitHub</a>
+      <a href="https://github.com/Stanimirdim92/ajaxify/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/Stanimirdim92/ajaxify/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="ajaxify" class="anchor" href="#ajaxify" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ajaxify</h1>
+
+<p>This is a vanilla Javascript AJAX library. The syntax is similar to jQuery.</p>
+
+<h3>
+<a id="supported-data-types" class="anchor" href="#supported-data-types" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Supported data types:</h3>
+
+<ul>
+<li>JSON</li>
+<li>Document</li>
+<li>Text</li>
+<li>XML</li>
+<li>Blob</li>
+<li>ArrayBuffer</li>
+<li>No JSONP support, sorry. Use CORS!</li>
+</ul>
+
+<h1>
+<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to use:</h1>
+
+<h3>
+<a id="formdata" class="anchor" href="#formdata" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FormData</h3>
+
+<pre><code>var formData = new FormData();
+formData.append('da', 'da=da&amp;asd=dsa');
+formData.append('id', 123456);
+
+ajaxify.ajax({
+    url: 'test.php',
+    method: "POST",
+    data: formData,
+    dataType: "text",
+    processData: false,
+    contentType: false,
+    headers: {
+        "my-Awes0mE-H3ad3R": "header4e"
+    }
+}).done(function (response, headers, XHR) {
+    console.log(response);
+    console.log(headers);
+    console.log(XHR);
+});
+</code></pre>
+
+<h3>
+<a id="array" class="anchor" href="#array" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Array</h3>
+
+<pre><code>var arr = [10, 20, 30, 'yes', 'no'];
+
+ajaxify.ajax({
+    url: 'test.php',
+    method: "POST",
+    data: arr,
+    headers: {
+        "my-Awes0mE-H3ad3R": "header4e"
+    }
+}).done(function (response, headers, XHR) {
+    console.log(response);
+    console.log(headers);
+    console.log(XHR);
+});
+</code></pre>
+
+<h3>
+<a id="text" class="anchor" href="#text" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Text</h3>
+
+<pre><code>var t = "yes=thisisatext&amp;nothisisnotatext";
+
+ajaxify.ajax({
+    url: 'test.php',
+    method: "POST",
+    data: t,
+    headers: {
+        "my-Awes0mE-H3ad3R": "header4e"
+    }
+}).done(function (response, headers, XHR) {
+    console.log(response);
+    console.log(headers);
+    console.log(XHR);
+});
+</code></pre>
+
+<h3>
+<a id="object" class="anchor" href="#object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Object</h3>
+
+<pre><code>var obj = {
+    yes: 'thisIsCamelCase'
+};
+
+ajaxify.ajax({
+    url: 'test.php',
+    method: "POST",
+    data: obj,
+    headers: {
+        "my-Awes0mE-H3ad3R": "header4e"
+    }
+}).done(function (response, headers, XHR) {
+    console.log(response);
+    console.log(headers);
+    console.log(XHR);
+});
+</code></pre>
+
+<h3>
+<a id="xml" class="anchor" href="#xml" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>XML</h3>
+
+<h6>
+<a id="-from-php-file-the-script-will-return-plain-text-which-we-parse-as-xml-document" class="anchor" href="#-from-php-file-the-script-will-return-plain-text-which-we-parse-as-xml-document" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a># From PHP file. The script will return plain text, which we parse as XML document</h6>
+
+<pre><code>ajaxify.ajax({
+    url: 'test.php',
+    method: "GET",
+    headers: {
+        "my-Awes0mE-H3ad3R": "header4e"
+    }
+}).done(function (response, headers, XHR) {
+    console.log(ajaxify.parseXML(response));
+    console.log(headers);
+    console.log(XHR);
+});
+</code></pre>
+
+<h6>
+<a id="-directly-from-xml-file-the-script-will-return-an-xml-object" class="anchor" href="#-directly-from-xml-file-the-script-will-return-an-xml-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a># Directly from XML file. The script will return an XML object</h6>
+
+<pre><code>ajaxify.ajax({
+    url: 'test.xml',
+    method: "GET",
+    headers: {
+        "my-Awes0mE-H3ad3R": "header4e"
+    }
+}).done(function (response, headers, XHR) {
+    console.log(response);
+    console.log(headers);
+    console.log(XHR);
+});
+</code></pre>
+
+<h3>
+<a id="blob" class="anchor" href="#blob" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Blob</h3>
+
+<pre><code>ajaxify.ajax({
+    url: 'ajax-icon-big.jpg',
+    responseType: 'blob',
+    method: "GET",
+    headers: {
+        "my-Awes0mE-H3ad3R": "header4e"
+    }
+}).done(function (response, headers, XHR) {
+    ajaxify.parseBlob(response, 'image/jpeg', '', true);
+});
+</code></pre>
+
+<h3>
+<a id="arraybufer" class="anchor" href="#arraybufer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ArrayBufer</h3>
+
+<pre><code>ajaxify.ajax({
+    url: 'ajax-application-development.jpg',
+    responseType: 'arraybuffer',
+    method: "GET",
+    headers: {
+        "my-Awes0mE-H3ad3R": "header4e"
+    }
+}).done(function (response, headers, XHR) {
+    ajaxify.parseArrayBuffer(response, 'image/jpeg', '#asd', true);
+});
+</code></pre>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/Stanimirdim92/ajaxify">Ajaxify</a> is maintained by <a href="https://github.com/Stanimirdim92">Stanimirdim92</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
