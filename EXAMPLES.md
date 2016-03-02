@@ -115,7 +115,9 @@ Ajax library with similar syntax like jQuery
             "my-Awes0mE-H3ad3R": "header4e"
         }
     }).done(function (response, headers, XHR) {
-        ajaxify.parseBlob(response, 'image/jpeg', '', true);
+        var blob = ajaxify.parseBlob(response, 'image/jpeg');
+
+        document.querySelector('#asd').src = blob;
     });
 
 ### ArrayBufer
@@ -127,5 +129,7 @@ Ajax library with similar syntax like jQuery
             "my-Awes0mE-H3ad3R": "header4e"
         }
     }).done(function (response, headers, XHR) {
-        ajaxify.parseArrayBuffer(response, 'image/jpeg', '#asd', true);
+        var buffer = ajaxify.parseArrayBuffer(response, 'image/jpeg');
+
+        document.querySelector('#asd').src = buffer;
     });

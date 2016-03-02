@@ -123,15 +123,14 @@ var ajaxify = (function (window, document, undefined) {
     /**
      * @param  {Array} The data from the XHR response passed as array
      * @param  {String} Resource mime type
-     * @param  {String} HTML attr where we want to append the data
-     * @param  {Boolean} Determinates if it should return the blob url or append to element
      *
      * @return {String}
      */
-    var parseBlob = function (data, mimeType, htmlAttr, append) {
+    var parseBlob = function (data, mimeType) {
         try {
-           var blob;
+            var blob;
             var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
+
             if(BlobBuilder) {
                 // android
                 var builder = new BlobBuilder();
@@ -141,20 +140,7 @@ var ajaxify = (function (window, document, undefined) {
                 blob = new Blob([data], {type: mimeType});
             }
 
-            var url = (window.URL || window.webkitURL || window.mozURL || window.msURL).createObjectURL(blob);
-
-            if (append === true) {
-                if (!htmlAttr || typeof htmlAttr !== 'string') {
-                    var content = document.getElementsByTagName("body")[0],
-                    img = document.createElement('img');
-                    img.setAttribute("id", 'my_blob_id');
-                    content.appendChild(img);
-                    htmlAttr = "#my_blob_id";
-                }
-                document.querySelector(htmlAttr).src = url;
-            } else {
-                return url;
-            }
+            return (window.URL || window.webkitURL || window.mozURL || window.msURL).createObjectURL(blob);
         } catch (e) {
             return [e, data];
         }
@@ -184,14 +170,14 @@ var ajaxify = (function (window, document, undefined) {
     };
 
     /**
+     * TODO: extend this function to use all array types, btoa and atob
+     *
      * @param  {Array} The data from the XHR response passed as array
      * @param  {String} Resource mime type
-     * @param  {String} HTML attr where we want to append the data
-     * @param  {Boolean} Determinates if it should return the blob url or append to element
      *
      * @return {String}
      */
-    var parseArrayBuffer = function (data, mimeType, htmlAttr, ret) {
+    var parseArrayBuffer = function (data, mimeType) {
         try {
             var uInt8Array = new Uint8Array(data);
             var i = uInt8Array.length;
@@ -201,19 +187,7 @@ var ajaxify = (function (window, document, undefined) {
             }
 
             data = binaryString.join('');
-            data = "data:"+mimeType+";base64,"+window.btoa(data);
-            if (ret === true) {
-                if (!htmlAttr || typeof htmlAttr !== 'string') {
-                    var content = document.getElementsByTagName("body")[0],
-                    img = document.createElement('img');
-                    img.setAttribute("id", 'my_arraybuffer_id');
-                    content.appendChild(img);
-                    htmlAttr = "#my_arraybuffer_id";
-                }
-                document.querySelector(htmlAttr).src = data;
-            } else {
-                return data;
-            }
+            return "data:"+mimeType+";base64,"+window.btoa(data);
         } catch (e) {
             return [e, data];
         }
@@ -229,7 +203,7 @@ var ajaxify = (function (window, document, undefined) {
             return merge(settings, config.settings);
         }
 
-        return settings;
+        return config.settings;
     };
 
     /**
@@ -270,6 +244,8 @@ var ajaxify = (function (window, document, undefined) {
     };
 
     /**
+     * TODO: this should not be activated for arraybuffer or blob
+     *
      * @param {Object|Array} Data for XMLHttpRequest
      *
      * @return {String}
@@ -309,7 +285,16 @@ var ajaxify = (function (window, document, undefined) {
          */
         var request = new (window.XMLHttpRequest || window.ActiveXObject)('MSXML2.XMLHTTP.3.0');
 
-        if (typeof config.s.data !== 'string' && config.s.processData && config.s.data) {
+        /**
+         * We should convert only plain objects or arrays.
+         * XH2 allows us to pass Blob or ArraBuffer directly to xhr.send() via ArrayBufferView
+         */
+        if (typeof config.s.data !== 'string' &&
+                   config.s.processData === true &&
+                   config.s.data &&
+                   config.s.responseType.toLowerCase() !== 'arraybuffer' &&
+                   config.s.responseType.toLowerCase() !== 'blob'
+            ) {
             config.s.data = convertDataToString(config.s.data);
         }
 
@@ -349,22 +334,15 @@ var ajaxify = (function (window, document, undefined) {
         /**
          * See if we can set request timeout
          */
-        if (detectXMLHttpVersion() === 2 && config.s.async === true && config.s.timeout > 0) {
-            request.timeout = config.s.timeout;
-        } else {
-            config.timeoutTimer = window.setTimeout(function () {
-                request.abort("timeout");
-            }, config.s.timeout);
+        if (config.s.async === true && config.s.timeout > 0) {
+            if (detectXMLHttpVersion() === 2) {
+                request.timeout = config.s.timeout;
+            } else {
+                config.timeoutTimer = window.setTimeout(function () {
+                    request.abort("timeout");
+                }, config.s.timeout);
+            }
         }
-
-        // make it configurable via user
-        request.onloadstart = function () {
-            var body = document.getElementsByTagName("body")[0],
-            p = document.createElement('p'),
-            msg = document.createTextNode('Loading...');
-            p.appendChild(msg);
-            body.appendChild(p);
-        };
 
         /**
          * Listen for specific event triggers
@@ -390,6 +368,15 @@ var ajaxify = (function (window, document, undefined) {
 
                 methods.always.call(methods, request);
             }
+        };
+
+        // make it configurable via user
+        request.onloadstart = function () {
+            var body = document.getElementsByTagName("body")[0],
+            p = document.createElement('p'),
+            msg = document.createTextNode('Loading...');
+            p.appendChild(msg);
+            body.appendChild(p);
         };
 
         // make it configurable via user
@@ -441,10 +428,10 @@ var ajaxify = (function (window, document, undefined) {
             request.onerror = function (){};
             // https://developer.mozilla.org/en-US/docs/Web/API/XDomainRequest
             setTimeout(function () {
-                request.send(config.s.method !== "GET" ? config.s.data : null);
-            }, 4); // 4 is the minimum time. It's hard coded in the browser.
+                request.send(config.s.data);
+            }, 4); // 4 is the minimum time. It's hard coded in the browsers.
         } else {
-            request.send(config.s.method !== "GET" ? config.s.data : null);
+            request.send(config.s.data);
         }
 
         /**
