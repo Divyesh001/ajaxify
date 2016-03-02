@@ -9,18 +9,21 @@
 <img src="" id="imgId">
 
 <script type="text/javascript">
+    var arr = [10, 20, 30, 'yes', 'no'];
+
     ajaxify.ajax({
-        url: 'ajax-application-development.jpg',
-        responseType: 'arraybuffer',
-        method: "GET",
+        url: 'test.php',
+        method: "POST",
+        data: arr,
         headers: {
             "my-Awes0mE-H3ad3R": "header4e"
         }
     }).done(function (response, headers, XHR) {
-        var buffer = ajaxify.parseArrayBuffer(response, 'image/jpeg');
-
-        document.querySelector('#imgId').src = buffer;
+        console.log(response);
+        console.log(headers);
+        console.log(XHR);
     });
+
 </script>
 </body>
 </html>

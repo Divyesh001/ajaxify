@@ -150,7 +150,7 @@ var ajaxify = (function (window, document, undefined) {
      * @param {String}
      * @param {String} If it's not a valid mime type, the browser will throw an error
      *
-     * @return {Object|Array}
+     * @return {Object|Document}
      */
     var parseXML = function (data, mimeType) {
         try {
@@ -347,7 +347,7 @@ var ajaxify = (function (window, document, undefined) {
         /**
          * Listen for specific event triggers
          */
-        request.onload = request.onreadystatechange = function () {
+        request.onload = function () {
             if (request.readyState === 4) {
                 if (request.status >= 200 && request.status < 400) {
                     if (config.timeoutTimer) {
