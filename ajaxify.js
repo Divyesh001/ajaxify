@@ -371,22 +371,22 @@ var ajaxify = (function (window, document, undefined) {
         };
 
         // make it configurable via user
-        request.onloadstart = function () {
-            var body = document.getElementsByTagName("body")[0],
-            p = document.createElement('p'),
-            msg = document.createTextNode('Loading...');
-            p.appendChild(msg);
-            body.appendChild(p);
-        };
+        // request.onloadstart = function () {
+        //     var body = document.getElementsByTagName("body")[0],
+        //     p = document.createElement('p'),
+        //     msg = document.createTextNode('Loading...');
+        //     p.appendChild(msg);
+        //     body.appendChild(p);
+        // };
 
-        // make it configurable via user
-        request.onloadend = function () {
-            var body = document.getElementsByTagName("body")[0],
-            p = document.createElement('p'),
-            msg = document.createTextNode('Loading done');
-            p.appendChild(msg);
-            body.appendChild(p);
-        };
+        // // make it configurable via user
+        // request.onloadend = function () {
+        //     var body = document.getElementsByTagName("body")[0],
+        //     p = document.createElement('p'),
+        //     msg = document.createTextNode('Loading done');
+        //     p.appendChild(msg);
+        //     body.appendChild(p);
+        // };
 
         /**
          * @param  {Object}
