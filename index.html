@@ -7,18 +7,27 @@
 
 <img src="" id="imgId">
 
+<div id="div"></div>
+
 <script src="ajaxify.js"></script>
 <script>
-    var arr = [10, 20, 30, 'yes', 'no'];
+    var obj = {'10':10, '20':20, '30':30, 'yes': 'yes', 'no': 'no'};
 
     ajaxify.ajax({
         url: 'test.php',
         method: "POST",
-        data: arr,
+        data: obj,
         headers: {
             "my-Awes0mE-H3ad3R": "header4e"
         }
     }).done(function (response, headers, XHR) {
+        var div = document.querySelector('#div');
+        var data = ajaxify.parseJSON(response);
+
+        ajaxify.each(data, function (i, v) {
+            div.innerHTML += v + ', ';
+        });
+
         console.log(response);
         console.log(headers);
         console.log(XHR);
