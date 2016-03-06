@@ -130,7 +130,7 @@ This is a vanilla Javascript AJAX library. The syntax is similar to jQuery.
     }).done(function (response, headers, XHR) {
         var blob = ajaxify.parseBlob(response, 'image/jpeg');
 
-        document.querySelector('#asd').src = blob;
+        document.querySelector('#imgId').src = blob;
     });
 
 ### ArrayBufer
@@ -142,14 +142,13 @@ This is a vanilla Javascript AJAX library. The syntax is similar to jQuery.
             "my-Awes0mE-H3ad3R": "header4e"
         }
     }).done(function (response, headers, XHR) {
-        var buffer = ajaxify.parseArrayBuffer(response, 'image/jpeg');
+        var buffer = ajaxify.parseArrayBuffer(response, Uint8Array, 'image/jpeg');
 
-        document.querySelector('#asd').src = buffer;
+        document.querySelector('#imgId').src = buffer;
     });
 
 
 TODO:
- - Extend parseArrayBuffer to use all array data types as well as atob and btoa
  - File upload
  - Progress bar
 

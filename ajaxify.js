@@ -64,7 +64,7 @@
                 '*': '*/*',
                 text: 'text/plain',
                 html: 'text/html',
-                xml: 'application/xml, text/xml',
+                xml: 'text/html, text/xml, application/xml, application/xhtml+xml, image/svg+xml',
                 json: 'application/json, text/javascript',
             },
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -123,7 +123,7 @@
     };
 
     /**
-     * @param {Object}
+     * @param {Object} data
      *
      * @return {Object|Array}
      */
@@ -136,8 +136,8 @@
     };
 
     /**
-     * @param  {Array} The data from the XHR response passed as array
-     * @param  {String} Resource mime type
+     * @param  {Array} data The data from the XHR response passed as array
+     * @param  {String} mimeType Resource mime type
      *
      * @return {String}
      */
@@ -162,15 +162,14 @@
     };
 
     /**
-     * @param {String}
-     * @param {String} If it's not a valid mime type, the browser will throw an error
+     * @param {String} data
      *
      * @return {Object|Document}
      */
-    var parseXML = function (data, mimeType) {
+    var parseXML = function (data) {
         try {
             if (window.DOMParser) {
-                return new window.DOMParser().parseFromString(data, (mimeType !== undefined ? mimeType : config.s.accepts.xml));
+                return new window.DOMParser().parseFromString(data, config.s.accepts.xml);
             } else {
                 var xml;
                 xml = new window.ActiveXObject('Microsoft.XMLDOM');
@@ -185,20 +184,24 @@
     };
 
     /**
-     * TODO: extend this function to use all array types, btoa and atob
-     *
-     * @param  {Array} The data from the XHR response passed as array
-     * @param  {String} Resource mime type
+     * @param  {Array} data The data from the XHR response passed as array
+     * @param  {Function} dataTypeArray - User must pass the second parameter as plain text  and not as string!
+     * @param  {String} mimeType Resource mime type
      *
      * @return {String}
      */
-    var parseArrayBuffer = function (data, mimeType) {
+    var parseArrayBuffer = function (data, dataTypeArray, mimeType) {
+        if (typeof dataTypeArray !== 'function') {
+            dataTypeArray = Uint8Array;
+        }
+
+        var typedArray = new dataTypeArray(data);
+
         try {
-            var uInt8Array = new Uint8Array(data);
-            var i = uInt8Array.length;
+            var i = typedArray.length;
             var binaryString = new Array(i);
             while (i--) {
-                binaryString[i] = String.fromCharCode(uInt8Array[i]);
+                binaryString[i] = String.fromCharCode(typedArray[i]);
             }
 
             data = binaryString.join('');
@@ -209,7 +212,7 @@
     };
 
     /**
-     * @param  {Object} Custom settings
+     * @param  {Object} settings Custom settings
      *
      * @return {Object}
      */
@@ -222,7 +225,7 @@
     };
 
     /**
-     * @param  {Object} XMLHttpRequest
+     * @param  {Object} request XMLHttpRequest
      *
      * @return {Object}
      */
@@ -245,8 +248,8 @@
     };
 
     /**
-     * @param {Object|Array}
-     * @param {Function}
+     * @param {Object|Array} obj
+     * @param {Function} callback
      *
      * @return {Object}
      */
@@ -267,7 +270,7 @@
     };
 
     /**
-     * @param  {Object} XMLHttpRequest
+     * @param  {Object} request XMLHttpRequest
      *
      * @return {Function}
      */
@@ -282,8 +285,8 @@
     };
 
     /**
-     * @param  {Object} XMLHttpRequest
-     * @param  {Object}
+     * @param  {Object} request XMLHttpRequest
+     * @param  {Object} methods
      *
      * @return {Object}
      */
@@ -296,9 +299,7 @@
     };
 
     /**
-     * TODO: this should not be activated for arraybuffer or blob
-     *
-     * @param {Object|Array} Data for XMLHttpRequest
+     * @param {Object|Array} data Data for XMLHttpRequest
      *
      * @return {String}
      */
@@ -320,7 +321,7 @@
     };
 
     /**
-     * @param {Object} Custom settings
+     * @param {Object} settings Custom settings
      *
      * @return {Object}
      */
@@ -339,7 +340,7 @@
 
         /**
          * We should convert only plain objects or arrays.
-         * XH2 allows us to pass Blob or ArraBuffer directly to xhr.send() via ArrayBufferView
+         * XH2 allows us to pass Blob or ArraBuffer directly to xhr.send() via ArrayBufferView.
          */
         if (typeof config.s.data !== 'string' &&
                    config.s.processData === true &&
@@ -423,7 +424,7 @@
         };
 
         /**
-         * @param  {Object}
+         * @param  {Object} event
          */
         request.ontimeout = function (event) {
             var body = document.getElementsByTagName('body')[0],
@@ -443,7 +444,7 @@
         };
 
         /**
-         * @param  {Object}
+         * @param  {Object} event
          */
         request.upload.onprogress = function (event) {
             if (event.lengthComputable) {
@@ -473,7 +474,7 @@
          */
         var xhrReq = {
             /**
-             * @param  {Function}
+             * @param  {Function} callback
              *
              * @return {Object}
              */
@@ -484,7 +485,7 @@
             },
 
             /**
-             * @param  {Function}
+             * @param  {Function} callback
              *
              * @return {Object}
              */
@@ -495,7 +496,7 @@
             },
 
             /**
-             * @param  {Function}
+             * @param  {Function} callback
              *
              * @return {Object}
              */
@@ -510,7 +511,7 @@
     };
 
     /**
-     * @param  {Object}
+     * @param  {Object} settings
      *
      * @return {Function}
      */
@@ -519,8 +520,8 @@
     };
 
     /**
-     * @param  {Object}
-     * @param  {Object}
+     * @param  {Object} obj
+     * @param  {Object} callback
      *
      * @return {Function}
      */
@@ -529,7 +530,7 @@
     };
 
     /**
-     * @param  {Object}
+     * @param  {Object} data
      *
      * @return {Function}
      */
@@ -538,7 +539,7 @@
     };
 
     /**
-     * @param  {Object}
+     * @param  {Object} data
      *
      * @return {Function}
      */
@@ -547,21 +548,25 @@
     };
 
     /**
-     * @param  {Object}
+     * @param  {Object} data
+     * @param  {Function} dataTypeArray
+     * @param  {Object} mimeType
      *
      * @return {Function}
      */
-    exports.parseBlob = function (data, mimeType, htmlAttr, append) {
-        return parseBlob(data, mimeType, htmlAttr, append);
+    exports.parseBlob = function (data, mimeType) {
+        return parseBlob(data, mimeType);
     };
 
     /**
-     * @param  {Object}
+     * @param  {Object} data
+     * @param  {Function} dataTypeArray
+     * @param  {Object} mimeType
      *
      * @return {Function}
      */
-    exports.parseArrayBuffer = function (data, mimeType, htmlAttr, append) {
-        return parseArrayBuffer(data, mimeType, htmlAttr, append);
+    exports.parseArrayBuffer = function (data, dataTypeArray, mimeType) {
+        return parseArrayBuffer(data, dataTypeArray, mimeType);
     };
 
     return exports;

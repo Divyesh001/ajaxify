@@ -11,27 +11,20 @@
 
 <script src="ajaxify.js"></script>
 <script>
-    var obj = {'10':10, '20':20, '30':30, 'yes': 'yes', 'no': 'no'};
 
     ajaxify.ajax({
-        url: 'test.php',
-        method: "POST",
-        data: obj,
+        url: 'ajax-application-development.jpg',
+        responseType: 'arraybuffer',
+        method: "GET",
         headers: {
             "my-Awes0mE-H3ad3R": "header4e"
         }
     }).done(function (response, headers, XHR) {
-        var div = document.querySelector('#div');
-        var data = ajaxify.parseJSON(response);
+        var buffer = ajaxify.parseArrayBuffer(response, Uint8Array, 'image/jpeg');
 
-        ajaxify.each(data, function (i, v) {
-            div.innerHTML += v + ', ';
-        });
-
-        console.log(response);
-        console.log(headers);
-        console.log(XHR);
+        document.querySelector('#imgId').src = buffer;
     });
+
 </script>
 </body>
 </html>
