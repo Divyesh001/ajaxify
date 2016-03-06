@@ -6,7 +6,7 @@
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
+ * 'Software'), to deal in the Software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish,
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
@@ -15,7 +15,7 @@
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
  * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
@@ -28,7 +28,22 @@
  * @license    http://www.opensource.org/licenses/mit-license.php  MIT License
  */
 
-var ajaxify = (function (window, document, undefined) {
+
+(function (window, document, factory) {
+    /**
+     * The use of 'use strict' might crash some libs and ASP.NET
+     * because they tend to use arguments.caller.callee
+     */
+    'use strict';
+
+    if (typeof define === 'function' && define.amd) {
+        define(factory);
+    } else if (typeof exports === 'object') {
+        module.exports = factory;
+    } else {
+        window.ajaxify = factory(window, document);
+    }
+})(this, document, function (window, document, undefined) {
 
     /**
      * The use of 'use strict' might crash some libs and ASP.NET
@@ -46,33 +61,33 @@ var ajaxify = (function (window, document, undefined) {
         xdr: false,
         settings: {
             accepts: {
-                "*": "*/*",
-                text: "text/plain",
-                html: "text/html",
-                xml: "application/xml, text/xml",
-                json: "application/json, text/javascript",
+                '*': '*/*',
+                text: 'text/plain',
+                html: 'text/html',
+                xml: 'application/xml, text/xml',
+                json: 'application/json, text/javascript',
             },
-            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             async: true,
-            method: "GET",
+            method: 'GET',
             timeout: 0, // XHR2
             url: location.href,
             username: null,
             password: null,
             withCredentials: false,
-            dataType: "json",
+            dataType: 'json',
             data: null,
             processData: true,
             headers: {},
             crossOrigin: false,
-            responseType: "", // XHR2
+            responseType: '', // XHR2
             allowedResponseTypes: {
-                "": "''",
-                "arraybuffer": "arraybuffer",
-                "blob": "blob",
-                "document": "document",
-                "json": "json",
-                "text": "text"
+                '': '""',
+                'arraybuffer': 'arraybuffer',
+                'blob': 'blob',
+                'document': 'document',
+                'json': 'json',
+                'text': 'text'
             }
         }
     };
@@ -158,7 +173,7 @@ var ajaxify = (function (window, document, undefined) {
                 return new window.DOMParser().parseFromString(data, (mimeType !== undefined ? mimeType : config.s.accepts.xml));
             } else {
                 var xml;
-                xml = new window.ActiveXObject("Microsoft.XMLDOM");
+                xml = new window.ActiveXObject('Microsoft.XMLDOM');
                 xml.async = false;
                 xml.loadXML(data);
 
@@ -187,7 +202,7 @@ var ajaxify = (function (window, document, undefined) {
             }
 
             data = binaryString.join('');
-            return "data:"+mimeType+";base64,"+window.btoa(data);
+            return 'data:'+mimeType+';base64,'+window.btoa(data);
         } catch (e) {
             return [e, data];
         }
@@ -213,10 +228,10 @@ var ajaxify = (function (window, document, undefined) {
      */
     var setHeaders = function (request) {
         if (config.s.contentType !== false) {
-            request.setRequestHeader("Content-type", config.s.contentType);
+            request.setRequestHeader('Content-type', config.s.contentType);
         }
 
-        request.setRequestHeader("Accept", config.s.accepts[config.s.dataType] ? config.s.accepts[config.s.dataType] : config.s.accepts["*"]);
+        request.setRequestHeader('Accept', config.s.accepts[config.s.dataType] ? config.s.accepts[config.s.dataType] : config.s.accepts['*']);
         request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
         // Check for headers option
@@ -224,6 +239,43 @@ var ajaxify = (function (window, document, undefined) {
             if (config.s.headers.hasOwnProperty(i)) {
                 request.setRequestHeader(i, config.s.headers[i]);
             }
+        }
+
+        return this;
+    };
+
+    /**
+     * @param {Object|Array}
+     * @param {Function}
+     *
+     * @return {Object}
+     */
+    var each = function (obj, callback) {
+        var i = 0;
+
+        if (Array.isArray(obj)) {
+            Array.prototype.forEach.call(obj, callback);
+        } else {
+            for (i in obj) {
+                if (callback.call(obj[i], i, obj[i]) === false) {
+                    break;
+                }
+            }
+        }
+
+        return obj;
+    };
+
+    /**
+     * @param  {Object} XMLHttpRequest
+     *
+     * @return {Function}
+     */
+    var abort = function (request) {
+        if (request) {
+            request.onload = function () {};
+            request.abort();
+            request = null;
         }
 
         return this;
@@ -254,17 +306,17 @@ var ajaxify = (function (window, document, undefined) {
         var pairs = [];
         if (Array.isArray(data)) {
             each(data, function (index, value) {
-                pairs[pairs.length] = encodeURIComponent(index) + "=" + encodeURIComponent(value);
+                pairs[pairs.length] = encodeURIComponent(index) + '=' + encodeURIComponent(value);
             });
         } else {
             for (var prop in data) {
                 if (data.hasOwnProperty(prop)) {
-                    pairs.push(encodeURIComponent(prop) + "=" + encodeURIComponent(data[prop]));
+                    pairs.push(encodeURIComponent(prop) + '=' + encodeURIComponent(data[prop]));
                 }
             }
         }
 
-        return pairs.join("&").replace('/%20/g', "+");
+        return pairs.join('&').replace('/%20/g', '+');
     };
 
     /**
@@ -283,7 +335,7 @@ var ajaxify = (function (window, document, undefined) {
         /**
          * IE 5.5+ and any other browser
          */
-        var request = new (window.XMLHttpRequest || window.ActiveXObject)('MSXML2.XMLHTTP.3.0');
+        var request = new window.XMLHttpRequest() || new window.ActiveXObject('MSXML2.XMLHTTP.3.0');
 
         /**
          * We should convert only plain objects or arrays.
@@ -310,7 +362,7 @@ var ajaxify = (function (window, document, undefined) {
          * Normalize URL
          */
         if (config.s.method === 'GET') {
-            config.s.url = (config.s.url += ((/\?/).test(config.s.url) ? "&" : "?") + (config.s.data !== null ? config.s.data : '') + '&time=' + new Date().getTime());
+            config.s.url = (config.s.url += ((/\?/).test(config.s.url) ? '&' : '?') + (config.s.data !== null ? config.s.data : '') + '&time=' + new Date().getTime());
         }
 
         /**
@@ -339,7 +391,7 @@ var ajaxify = (function (window, document, undefined) {
                 request.timeout = config.s.timeout;
             } else {
                 config.timeoutTimer = window.setTimeout(function () {
-                    request.abort("timeout");
+                    request.abort('timeout');
                 }, config.s.timeout);
             }
         }
@@ -357,7 +409,7 @@ var ajaxify = (function (window, document, undefined) {
                     var response;
                     if (request.response) {
                         response = request.response;
-                    } else if (request.responseType === "text" || !request.responseType) {
+                    } else if (request.responseType === 'text' || !request.responseType) {
                         response = request.responseText || request.responseXML;
                     }
 
@@ -370,29 +422,11 @@ var ajaxify = (function (window, document, undefined) {
             }
         };
 
-        // make it configurable via user
-        // request.onloadstart = function () {
-        //     var body = document.getElementsByTagName("body")[0],
-        //     p = document.createElement('p'),
-        //     msg = document.createTextNode('Loading...');
-        //     p.appendChild(msg);
-        //     body.appendChild(p);
-        // };
-
-        // // make it configurable via user
-        // request.onloadend = function () {
-        //     var body = document.getElementsByTagName("body")[0],
-        //     p = document.createElement('p'),
-        //     msg = document.createTextNode('Loading done');
-        //     p.appendChild(msg);
-        //     body.appendChild(p);
-        // };
-
         /**
          * @param  {Object}
          */
         request.ontimeout = function (event) {
-            var body = document.getElementsByTagName("body")[0],
+            var body = document.getElementsByTagName('body')[0],
             p = document.createElement('p'),
             msg = document.createTextNode('Loading...');
             p.appendChild(msg);
@@ -476,43 +510,6 @@ var ajaxify = (function (window, document, undefined) {
     };
 
     /**
-     * @param {Object|Array}
-     * @param {Function}
-     *
-     * @return {Object}
-     */
-    var each = function (obj, callback) {
-        var i = 0;
-
-        if (Array.isArray(obj)) {
-            Array.prototype.forEach.call(obj, callback);
-        } else {
-            for (i in obj) {
-                if (callback.call(obj[i], i, obj[i]) === false) {
-                    break;
-                }
-            }
-        }
-
-        return obj;
-    };
-
-    /**
-     * @param  {Object} XMLHttpRequest
-     *
-     * @return {Function}
-     */
-    var abort = function (request) {
-        if (request) {
-            request.onload = function () {};
-            request.abort();
-            request = null;
-        }
-
-        return this;
-    };
-
-    /**
      * @param  {Object}
      *
      * @return {Function}
@@ -568,4 +565,4 @@ var ajaxify = (function (window, document, undefined) {
     };
 
     return exports;
-})(window, document);
+});

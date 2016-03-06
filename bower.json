@@ -1,0 +1,28 @@
+{
+  "name": "Ajaxify",
+  "description": "Javascript ajax library with simillar jQuery syntax",
+  "main": "ajaxify.js",
+  "authors": [
+    "StanimirDim92 <stanimirdim92@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "ajax.",
+    "ajaxify",
+    "javascript",
+    "async"
+  ],
+  "homepage": "https://github.com/Stanimirdim92/ajaxify",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
