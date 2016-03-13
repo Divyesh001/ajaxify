@@ -1,9 +1,29 @@
 {
   "name": "@stanimirdim92/ajaxify",
   "description": "Javascript ajax library with simillar jQuery syntax",
-  "version": "0.1.1",
-  "main": "ajaxify.js",
-  "repository": "StanimirDim92/ajaxify",
+  "version": "0.1.2",
+  "homepage": "http://stanimirdim92.github.io/ajaxify/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stanimirdim92/ajaxify.git"
+  },
+  "tags": [
+    "ajax",
+    "vanilla",
+    "javascript",
+    "ajaxify",
+    "cors",
+    "async",
+    "tool",
+  ],
+  "files": [
+    "gulpfile.js",
+    "bower.js",
+    "dist",
+    "src",
+    "examples",
+    "test",
+  ],
   "licenses": [
     {
       "type": "MIT",
@@ -19,9 +39,5 @@
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-install": "^0.6.0"
-  },
-  "files": [
-    "LICENSE.md",
-    "dist/ajaxify.min.js"
-  ]
+  }
 }
