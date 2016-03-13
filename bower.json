@@ -1,5 +1,5 @@
 {
-  "name": "Ajaxify",
+  "name": "stanimirdim92/ajaxify",
   "description": "Javascript ajax library with simillar jQuery syntax",
   "main": "ajaxify.js",
   "authors": [
@@ -7,12 +7,19 @@
   ],
   "license": "MIT",
   "keywords": [
-    "ajax.",
+    "ajax",
     "ajaxify",
     "javascript",
     "async"
   ],
+  "authors": [
+    "Stanimir Dimitrov <stanimirdim92@gmail.com> (https://bg.linkedin.com/in/stanimirdim92)"
+  ],
   "homepage": "https://github.com/Stanimirdim92/ajaxify",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Stanimirdim92/ajaxify.git"
+  },
   "moduleType": [
     "amd",
     "globals",

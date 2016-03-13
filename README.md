@@ -14,6 +14,20 @@ This is a vanilla Javascript AJAX library. The syntax is similar to jQuery.
  - ArrayBuffer
  - No JSONP support, sorry. Use CORS!
 
+# Installation
+
+Available on [Bower](http://bower.io) as **stanimirdim92-ajaxify**.
+
+```
+$ bower install stanimirdim92-ajaxify
+```
+
+Available on [NPM](http://npmjs.com) as **@stanimirdim92/ajaxify**.
+
+```
+$ npm install @stanimirdim92/ajaxify
+```
+
 # How to use:
 
 ### FormData

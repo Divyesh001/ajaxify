@@ -1,21 +1,28 @@
 {
-  "name": "ajaxify",
+  "name": "@stanimirdim92/ajaxify",
   "description": "Javascript ajax library with simillar jQuery syntax",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "ajaxify.js",
-  "repository": "github/ajaxify",
+  "repository": "StanimirDim92/ajaxify",
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/github/ajaxify/blob/master/LICENSE"
+      "url": "https://github.com/Stanimirdim92/ajaxify/blob/master/LICENSE.md"
     }
   ],
   "devDependencies": {
     "bower": "1.3.8",
-    "jshint": "^2.8.0"
+    "gulp-uglify": "^1.5.3",
+    "jshint": "^2.8.0",
+    "chai": "1.10.0",
+    "jshint": "2.8.0",
+    "mocha": "2.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-install": "^0.6.0"
   },
   "files": [
-    "LICENSE",
+    "LICENSE.md",
     "ajaxify.js"
-  ]
+  ],
 }
