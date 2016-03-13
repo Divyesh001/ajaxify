@@ -14,7 +14,7 @@
     "ajaxify",
     "cors",
     "async",
-    "tool",
+    "tool"
   ],
   "files": [
     "gulpfile.js",
@@ -22,7 +22,7 @@
     "dist",
     "src",
     "examples",
-    "test",
+    "test"
   ],
   "licenses": [
     {
