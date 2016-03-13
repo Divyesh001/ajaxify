@@ -15,7 +15,6 @@
     "gulp-uglify": "^1.5.3",
     "jshint": "^2.8.0",
     "chai": "1.10.0",
-    "jshint": "2.8.0",
     "mocha": "2.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.6.0",
@@ -23,6 +22,6 @@
   },
   "files": [
     "LICENSE.md",
-    "ajaxify.js"
-  ],
+    "dist/ajaxify.min.js"
+  ]
 }
