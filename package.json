@@ -1,7 +1,7 @@
 {
   "name": "@stanimirdim92/ajaxify",
   "description": "Javascript ajax library with simillar jQuery syntax",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "homepage": "http://stanimirdim92.github.io/ajaxify/",
   "repository": {
     "type": "git",
@@ -24,6 +24,9 @@
     "examples",
     "test"
   ],
+  "bin": {
+    "stanimirdim92/ajaxify": "./dist/ajaxify.min.js"
+  },
   "licenses": [
     {
       "type": "MIT",
